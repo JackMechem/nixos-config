@@ -57,6 +57,7 @@ input {
     kb_rules =
 
     follow_mouse = 1
+    mouse_refocus = false
 
     touchpad {
         natural_scroll = no
@@ -154,6 +155,7 @@ windowrulev2 = float,class:^(solaar)$
 windowrulev2 = float,class:^(rice-settings)$
 
 
+
 # See https://wiki.hyprland.org/Configuring/Keywords/ for more
 $mainMod = SUPER
 
@@ -184,6 +186,9 @@ bind = $mainMod, P, pseudo, # dwindle
 bind = $mainMod, V, togglesplit, # dwindle
 bind = $mainMod, M, fullscreen, 1
 bind = $mainMod, F, fullscreen, 0
+
+# mouse_refocus = false work around since I need this set to false for zoom to work properly...
+bind = $mainMod, Escape, focuscurrentorlast
 
 # Hide Bar
 bind = $mainMod SHIFT, P, exec, killall ags || exec ags
