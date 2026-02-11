@@ -101,11 +101,11 @@ decoration {
         color = rgba(00000040)
     }
 
-    layerrule = blur,notifications
-    layerrule = ignorezero,notifications
-    layerrule = blur,gtk4-layer-shell
-    layerrule = ignorealpha 0.3,gtk4-layer-shell
-    layerrule = blur,gtkapps
+    #layerrule = blur,notifications
+    #layerrule = ignorezero,notifications
+    #layerrule = blur,gtk4-layer-shell
+    #layerrule = ignorealpha 0.3,gtk4-layer-shell
+    #layerrule = blur,gtkapps
 }
 
 animations {
@@ -146,13 +146,13 @@ misc {
 # Example windowrule v2
 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
 # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
-windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
-windowrulev2 = float,class:^(pavucontrol)$
-windowrulev2 = float,class:^(nwg-look)$
-windowrulev2 = float,class:^(waypaper)$
-windowrulev2 = float,class:^(openrgb)$
-windowrulev2 = float,class:^(solaar)$
-windowrulev2 = float,class:^(rice-settings)$
+#windowrule = suppressevent maximize, class:.* # You'll probably like this.
+#windowrule = float,class:^(pavucontrol)$
+#windowrule = float,class:^(nwg-look)$
+#windowrule = float,class:^(waypaper)$
+#windowrule = float,class:^(openrgb)$
+#windowrule = float,class:^(solaar)$
+#windowrule = float,class:^(rice-settings)$
 
 
 
