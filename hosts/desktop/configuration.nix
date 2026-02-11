@@ -44,6 +44,10 @@
 
   nixpkgs.config.allowUnfree = true;
 
+    #  services.midirun = {
+    #        enable = true;
+    #    };
+
   xdg.portal = {
     enable = true;
     wlr.enable = true;
