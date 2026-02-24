@@ -14,6 +14,7 @@
     ../../modules/home-manager/hyprland-desktop.nix
     ../../modules/home-manager/homepackages.nix
     ../../modules/home-manager/shell-aliases.nix
+    ../../modules/home-manager/neovimpackages.nix
   ];
 
   programs.home-manager.enable = true;

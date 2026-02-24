@@ -10,7 +10,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    neovim
+        #    neovim
     tree
     vim # Both vim and neovim just in case
     wget
