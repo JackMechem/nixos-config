@@ -22,5 +22,8 @@
         glib
         zlib
         deno
+
+        ### Development Tools
+        jetbrains.idea
     ];
 }
