@@ -26,5 +26,6 @@
         ### Development Tools
         jetbrains.idea
         jetbrains-toolbox
+        jdk
     ];
 }
