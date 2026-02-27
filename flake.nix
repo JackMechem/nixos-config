@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     gtkapps.url = "github:JackMechem/gtkapps";
     gtkbar.url = "github:JackMechem/gtkbar";
-        #    midirun.url = "path:/home/jack/Projects/midirun";
+    #    midirun.url = "path:/home/jack/Projects/midirun";
 
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
@@ -36,7 +36,7 @@
         modules = [
           ./hosts/desktop/configuration.nix
           inputs.home-manager.nixosModules.default
-                    #inputs.midirun.nixosModules.default
+          #inputs.midirun.nixosModules.default
         ];
       };
     };
