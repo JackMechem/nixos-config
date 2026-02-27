@@ -2,268 +2,220 @@
 {
   wayland.windowManager.hyprland = {
     enable = true;
-    extraConfig = ''
 
-      $monitor1 = eDP-1
+    settings =
+      let
+        monitor1 = "eDP-1";
+        mainMod = "SUPER";
+      in
+      {
+        # --- Monitor Configuration ---
+        monitor = [
+          "${monitor1},1920x1080@60,0x0,1,bitdepth,10"
+        ];
 
-      # Configure Monitors
-      monitor=$monitor1,1920x1080@60,0x0,1,bitdepth,10
+        # --- Workspaces ---
+        workspace = [
+          "1,monitor:${monitor1}"
+          "2,monitor:${monitor1}"
+          "3,monitor:${monitor1}"
+          "4,monitor:${monitor1}"
+          "5,monitor:${monitor1}"
+          "6,monitor:${monitor1}"
+          "7,monitor:${monitor1}"
+          "8,monitor:${monitor1}"
+          "9,monitor:${monitor1}"
+          "10,monitor:${monitor1}"
+        ];
 
-      # Workspaces
-      workspace=1,monitor:$monitor1,default:true
-      workspace=2,monitor:$monitor1
-      workspace=3,monitor:$monitor1
-      workspace=4,monitor:$monitor1
-      workspace=5,monitor:$monitor1
-      workspace=6,monitor:$monitor1
-      workspace=7,monitor:$monitor1
-      workspace=8,monitor:$monitor1
-      workspace=9,monitor:$monitor1
-      workspace=10,monitor:$monitor1
+        # --- Exec Once ---
+        exec-once = [
+          "waypaper --restore"
+          "gtkbar"
+          "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+          "solaar -w hide"
+        ];
 
-      # Start Shit
-      # exec-once = sh /home/jack/.config/waybar/launch-waybar.sh & waypaper --restore
-      exec-once = waypaper --restore
-      #exec-once = ags run /home/jack/.config/ags/simple-bar/
-      # exec-once = hyprpanel
-      exec-once = gtkbar
-      exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-      exec-once=systemctl --user mask xdg-desktop-portal-gnome
+        # --- Variables ---
+        "$terminal" = "ghostty";
+        "$fileManager" = "thunar";
+        "$menu" = "gtkapps";
 
-      #env = XDG_CONFIG_HOME,/home/jack/.config
+        env = [
+          "XCURSOR_SIZE,24"
+          "QT_QPA_PLATFORMTHEME,qt5ct"
+        ];
 
+        # --- Input ---
+        input = {
+          kb_layout = "us";
+          follow_mouse = 1;
+          mouse_refocus = false;
+          touchpad = {
+            natural_scroll = "no";
+          };
+          accel_profile = "flat";
+          sensitivity = 1;
+        };
 
-      # Source a file (multi-file configs)
-      # source = ~/.config/hypr/myColors.conf
+        device = {
+          name = "synaptics-tm3276-022";
+          enabled = false;
+        };
 
-      # Set programs that you use
-      $terminal = ghostty 
-      $fileManager = thunar
-      #$menu = wofi --show drun
-      # env = GTK_DEBUG=all gtkapps
-      $menu = gtkapps 
-      #$menu = dbus-run-session -- gtkapps
+        # --- General ---
+        general = {
+          gaps_in = 3;
+          gaps_out = "10,10,10,10";
+          border_size = 2;
+          "col.active_border" = "rgba(e4687690)";
+          "col.inactive_border" = "rgba(2c2b3180)";
+          layout = "dwindle";
+          allow_tearing = false;
+        };
 
-      # Some default env vars.
-      # env = XCURSOR_SIZE,24
-      # env = QT_QPA_PLATFORMTHEME,qt5ct # change to qt6ct if you have that
-      # env = _JAVA_OPTIONS,-Dawt.useSystemAAFontSettings=on
-      # env = XDG_SCREENSHOTS_DIR,/home/jack/Photos/Screenshots
-      # env = XCURSOR_THEME,Bibata-Modern-Ice
+        # --- Decoration ---
+        decoration = {
+          rounding = 12;
+          blur = {
+            enabled = true;
+            new_optimizations = true;
+            size = 8;
+            passes = 2;
+          };
+          shadow = {
+            enabled = true;
+            range = 20;
+            render_power = 5;
+            color = "rgba(00000040)";
+          };
+        };
 
-      device {
-        name = synaptics-tm3276-022
-        enabled = false
-      }
+        # --- Animations ---
+        animations = {
+          enabled = false;
+          bezier = "myBezier, 0.05, 0.9, 0.1, 1";
+          animation = [
+            "windows, 1, 3, myBezier"
+            "windowsOut, 1, 7, default, popin 80%"
+            "border, 1, 10, default"
+            "borderangle, 1, 8, default"
+            "fade, 1, 7, default"
+            "workspaces, 1, 6, default"
+          ];
+        };
 
-      # For all categories, see https://wiki.hyprland.org/Configuring/Variables/
-      input {
-          kb_layout = us
-          kb_variant =
-          kb_model =
-          kb_options = caps:escape
-          kb_rules =
+        dwindle = {
+          pseudotile = "yes";
+          preserve_split = "yes";
+        };
 
-          follow_mouse = 1
+        misc = {
+          force_default_wallpaper = 0;
+        };
 
-          touchpad {
-              natural_scroll = no
-          }
+        # --- Keybinds ---
+        bind = [
+          # System/Rice
+          "${mainMod}, grave, exec, rice-settings"
+          "${mainMod}, RETURN, exec, $terminal"
+          "${mainMod} SHIFT, RETURN, exec, [float] $terminal"
+          "${mainMod}, Q, killactive"
+          "${mainMod} SHIFT, M, exit"
+          "${mainMod}, E, exec, $fileManager"
+          "${mainMod} SHIFT, E, exec, [float] $fileManager"
+          "${mainMod}, W, exec, zen-browser"
+          "${mainMod}, TAB, togglefloating"
+          "${mainMod}, SPACE, exec, $menu"
+          "${mainMod}, P, pseudo"
+          "${mainMod}, V, togglesplit"
+          "${mainMod}, M, fullscreen, 1"
+          "${mainMod}, F, fullscreen, 0"
+          "${mainMod}, Escape, focuscurrentorlast"
+          "${mainMod} SHIFT, P, exec, killall ags || exec ags"
+          "${mainMod} SHIFT, S, exec, grimshot savecopy area"
+          "${mainMod}, HOME, exec, wofi-emoji"
 
-          accel_profile = flat
+          # Focus
+          "${mainMod}, h, movefocus, l"
+          "${mainMod}, l, movefocus, r"
+          "${mainMod}, k, movefocus, u"
+          "${mainMod}, j, movefocus, d"
 
-          sensitivity = 1.0 # -1.0 to 1.0, 0 means no modification.
+          # Move
+          "${mainMod} SHIFT, h, movewindow, l"
+          "${mainMod} SHIFT, l, movewindow, r"
+          "${mainMod} SHIFT, k, movewindow, u"
+          "${mainMod} SHIFT, j, movewindow, d"
 
+          # Resize
+          "${mainMod} ALT, h, resizeactive, -160 0"
+          "${mainMod} ALT, l, resizeactive, 160 0"
+          "${mainMod} ALT, k, resizeactive, 0 -160"
+          "${mainMod} ALT, j, resizeactive, 0 160"
 
-      }
+          # Workspaces
+          "${mainMod}, 1, workspace, 1"
+          "${mainMod}, 2, workspace, 2"
+          "${mainMod}, 3, workspace, 3"
+          "${mainMod}, 4, workspace, 4"
+          "${mainMod}, 5, workspace, 5"
+          "${mainMod}, 6, workspace, 6"
+          "${mainMod}, 7, workspace, 7"
+          "${mainMod}, 8, workspace, 8"
+          "${mainMod}, 9, workspace, 9"
+          "${mainMod}, 0, workspace, 10"
+          "${mainMod} ALT, 1, workspace, 11"
+          "${mainMod} ALT, 2, workspace, 12"
 
-      general {
-          gaps_in = 3
-          gaps_out = 8
-          border_size = 2
-          col.active_border = rgba(e46876cc)
-          col.inactive_border = rgb(595959)
+          # Move to Workspace
+          "${mainMod} SHIFT, 1, movetoworkspace, 1"
+          "${mainMod} SHIFT, 2, movetoworkspace, 2"
+          "${mainMod} SHIFT, 3, movetoworkspace, 3"
+          "${mainMod} SHIFT, 4, movetoworkspace, 4"
+          "${mainMod} SHIFT, 5, movetoworkspace, 5"
+          "${mainMod} SHIFT, 6, movetoworkspace, 6"
+          "${mainMod} SHIFT, 7, movetoworkspace, 7"
+          "${mainMod} SHIFT, 8, movetoworkspace, 8"
+          "${mainMod} SHIFT, 9, movetoworkspace, 9"
+          "${mainMod} SHIFT, 0, movetoworkspace, 10"
+          "${mainMod} ALT SHIFT, 1, movetoworkspace, 11"
+          "${mainMod} ALT SHIFT, 2, movetoworkspace, 12"
 
-          # Every other layout is bad
-          layout = dwindle
+          # Special
+          "${mainMod}, O, togglespecialworkspace, magic"
+          "${mainMod} SHIFT, O, movetoworkspace, special:magic"
 
-          # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on (Why tf would you turn this on)
-          allow_tearing = false
-      }
+          # Multimedia
+          ", XF86AudioPrev, exec, playerctl previous"
+          ", XF86AudioPlay, exec, playerctl play-pause"
+          ", XF86AudioPause, exec, playerctl pause"
+          ", XF86AudioNext, exec, playerctl next"
 
-      decoration {
-          # See https://wiki.hyprland.org/Configuring/Variables/ for more
+          # Custom scripts
+          "${mainMod}, b, exec, bash -c 'pgrep gtkbar &>/dev/null && killall gtkbar || gtkbar &'"
+        ];
 
-          rounding = 10
-          
-          blur {
-              enabled = true
-              size = 3
-              passes = 2
-              vibrancy = 0.1696
-          }
-          
-          shadow {
-              enabled = true
-              offset = 2 2
-              range = 20
-              render_power = 5
-              color = rgba(00000040)
-          }
+        bindle = [
+          ", XF86AudioRaiseVolume, exec, pamixer -i 2"
+          ", XF86AudioLowerVolume, exec, pamixer -d 2"
+        ];
 
-      #     layerrule = blur,waybar
-      #     layerrule = ignorezero,waybar
-      #     layerrule = ignorealpha 0.5,waybar
-          layerrule = blur,notifications
-          layerrule = blur,gtk4-layer-shell
-          layerrule = ignorealpha 0.2,gtk4-layer-shell
-          layerrule = ignorezero,notifications
-          layerrule = blur,wofi
-          layerrule = ignorezero,wofi
-          layerrule = ignorealpha 0.5,wofi
-      }
+        bindl = [
+          ", XF86AudioMute, exec, pamixer -t"
+          ", XF86AudioMicMute, exec, pamixer --default-source -t"
+        ];
 
-      animations {
-          enabled = no
+        bindm = [
+          "${mainMod}, mouse:272, movewindow"
+          "${mainMod}, mouse:273, resizewindow"
+        ];
 
-          # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
-
-          bezier = myBezier, 0.05, 0.9, 0.1, 1.05
-
-          animation = windows, 1, 7, myBezier
-          animation = windowsOut, 1, 7, default, popin 80%
-          animation = border, 1, 10, default
-          animation = borderangle, 1, 8, default
-          animation = fade, 1, 7, default
-          animation = workspaces, 1, 6, default
-      }
-
-      dwindle {
-          # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
-          pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-          preserve_split = yes # you probably want this
-      }
-
-      # master {
-      #     # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-      #     new_is_master = true
-      # }
-
-      misc {
-          # See https://wiki.hyprland.org/Configuring/Variables/ for more
-          force_default_wallpaper = 0 # Set to 0 or 1 to disable the anime mascot wallpapers
-      }
-
-
-      # Example windowrule v1
-      # windowrule = float, ^(kitty)$
-      # Example windowrule v2
-      # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
-      # See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
-      windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
-      windowrulev2 = float,class:^(pavucontrol)$
-      windowrulev2 = float,class:^(nwg-look)$
-      windowrulev2 = float,class:^(waypaper)$
-      windowrulev2 = float,class:^(openrgb)$
-      windowrulev2 = float,class:^(solaar)$
-      windowrulev2 = float,class:^(rice-settings)$
-
-
-      # See https://wiki.hyprland.org/Configuring/Keywords/ for more
-      $mainMod = SUPER
-
-      # Rice Settings (Developed by me)
-      bind = SUPER, grave, exec, rice-settings
-
-      # Bar relaunch
-      bind = $mainMod, B, exec, gtkbar
-
-
-      # Multimedia Keys
-      bindle = , XF86AudioRaiseVolume, exec, wpctl set-volume -l 1.2 @DEFAULT_AUDIO_SINK@ 5%+
-      bindle = , XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-      bindl = , XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-      bindl = , XF86AudioMicMute, exec, pamixer --default-source -t
-      bind = , XF86AudioPrev, exec, playerctl previous
-      bind = , XF86AudioPlay, exec, playerctl play-pause
-      bind = , XF86AudioPause, exec, playerctl pause
-      bind = , XF86AudioNext, exec, playerctl next
-
-      binde = , XF86MonBrightnessUp, exec, brightnessctl set 10%+
-      binde = , XF86MonBrightnessDown, exec, brightnessctl set 10%-
-
-      bind = $mainMod, RETURN, exec, $terminal
-      bind = $mainMod SHIFT, RETURN, exec, [float] $terminal
-      bind = $mainMod, Q, killactive, 
-      bind = $mainMod SHIFT, M, exit, 
-      bind = $mainMod, E, exec, $fileManager
-      bind = $mainMod SHIFT, E, exec, [float] $fileManager
-      bind = $mainMod, TAB, togglefloating, 
-      bind = $mainMod, SPACE, exec, $menu
-      bind = $mainMod, P, pseudo, # dwindle
-      bind = $mainMod, V, togglesplit, # dwindle
-      bind = $mainMod, M, fullscreen, 1
-      bind = $mainMod, F, fullscreen, 0
-
-      # screenshot
-      bind = $mainMod SHIFT, S, exec, grimshot savecopy area
-
-      # emojis
-      bind = $mainMod, HOME, exec, wofi-emoji
-
-      # Window focus
-      bind = SUPER, h, movefocus, l
-      bind = SUPER, l, movefocus, r
-      bind = SUPER, k, movefocus, u
-      bind = SUPER, j, movefocus, d
-
-      # Move window
-      bind = SUPER SHIFT, h, movewindow, l
-      bind = SUPER SHIFT, l, movewindow, r
-      bind = SUPER SHIFT, k, movewindow, u
-      bind = SUPER SHIFT, j, movewindow, d
-
-      # Resize window
-      bind = SUPER ALT, h, resizeactive, -160 0
-      bind = SUPER ALT, l, resizeactive, 160 0
-      bind = SUPER ALT, k, resizeactive, 0 -160
-      bind = SUPER ALT, j, resizeactive, 0 160
-
-      # Switch workspaces with mainMod + [0-9]
-      bind = $mainMod, 1, workspace, 1
-      bind = $mainMod, 2, workspace, 2
-      bind = $mainMod, 3, workspace, 3
-      bind = $mainMod, 4, workspace, 4
-      bind = $mainMod, 5, workspace, 5
-      bind = $mainMod, 6, workspace, 6
-      bind = $mainMod, 7, workspace, 7
-      bind = $mainMod, 8, workspace, 8
-      bind = $mainMod, 9, workspace, 9
-      bind = $mainMod, 0, workspace, 10
-
-      # Move active window to a workspace with mainMod + SHIFT + [0-9]
-      bind = $mainMod SHIFT, 1, movetoworkspace, 1
-      bind = $mainMod SHIFT, 2, movetoworkspace, 2
-      bind = $mainMod SHIFT, 3, movetoworkspace, 3
-      bind = $mainMod SHIFT, 4, movetoworkspace, 4
-      bind = $mainMod SHIFT, 5, movetoworkspace, 5
-      bind = $mainMod SHIFT, 6, movetoworkspace, 6
-      bind = $mainMod SHIFT, 7, movetoworkspace, 7
-      bind = $mainMod SHIFT, 8, movetoworkspace, 8
-      bind = $mainMod SHIFT, 9, movetoworkspace, 9
-      bind = $mainMod SHIFT, 0, movetoworkspace, 10
-
-      # Example special workspace (scratchpad)
-      bind = $mainMod, O, togglespecialworkspace, magic
-      bind = $mainMod SHIFT, O, movetoworkspace, special:magic
-
-      # Scroll through existing workspaces with mainMod + scroll
-      bind = $mainMod, mouse_down, workspace, e+1
-      bind = $mainMod, mouse_up, workspace, e-1
-
-      # Move/resize windows with mainMod + LMB/RMB and dragging
-      bindm = $mainMod, mouse:272, movewindow
-      bindm = $mainMod, mouse:273, resizewindow
-    '';
+        # Mouse scroll workspaces
+        bindn = [
+          "${mainMod}, mouse_down, workspace, e+1"
+          "${mainMod}, mouse_up, workspace, e-1"
+        ];
+      };
   };
 }
