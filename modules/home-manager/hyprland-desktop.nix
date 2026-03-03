@@ -56,7 +56,7 @@
                 input = {
                     kb_layout = "us";
                     follow_mouse = 1;
-                    mouse_refocus = false;
+                    mouse_refocus = true;
                     touchpad = {
                         natural_scroll = "no";
                     };
@@ -74,6 +74,12 @@
                     layout = "dwindle";
                     allow_tearing = false;
                 };
+
+                # --- Fix Zoom ---
+                windowrule = [
+                    "match:class ^(zoom)$, no_follow_mouse 1"
+                    "match:class ^(zoom)$, suppress_event maximize"
+                ];
 
                 # --- Decoration ---
                 decoration = {
