@@ -27,5 +27,6 @@
         jetbrains.idea
         jetbrains-toolbox
         jdk
+        gnumake
     ];
 }
