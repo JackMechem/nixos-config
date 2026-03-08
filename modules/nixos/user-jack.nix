@@ -11,7 +11,6 @@
             "docker"
         ]; # Enable ‘sudo’ for the user.
         packages = with pkgs; [
-            zed-editor
             cargo
             clang
             clang-tools

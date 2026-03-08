@@ -39,5 +39,13 @@
           #inputs.midirun.nixosModules.default
         ];
       };
+      nixosConfigurations.dellserv = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+	  ./hosts/dellserv/configuration.nix
+	  inputs.home-manager.nixosModules.default
+	  #inputs.midirun.nixosModules.default
+	];
+      };
     };
 }

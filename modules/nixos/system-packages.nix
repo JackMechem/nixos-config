@@ -5,8 +5,6 @@
   programs.firefox.enable = true;
   programs.hyprland.enable = true;
 
-  services.gtkapps.enable = true;
-  services.gtkbar.enable = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [

@@ -48,6 +48,9 @@
 
     virtualisation.docker.enable = true;
 
+    services.gtkapps.enable = true;
+    services.gtkbar.enable = true;
+
     xdg.portal = {
         enable = true;
         wlr.enable = true;

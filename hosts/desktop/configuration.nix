@@ -44,6 +44,9 @@
 
     nixpkgs.config.allowUnfree = true;
 
+    services.gtkapps.enable = true;
+    services.gtkbar.enable = true;
+
     #  services.midirun = {
     #        enable = true;
     #    };

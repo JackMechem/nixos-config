@@ -11,6 +11,7 @@
     syntaxHighlighting.enable = true;
     autosuggestion.enable = true;
     initContent = ''
+      ZSH_AUTOSUGGEST_USE_ASYNC=false
       fastfetch -c examples/11
     '';
     oh-my-zsh = {
