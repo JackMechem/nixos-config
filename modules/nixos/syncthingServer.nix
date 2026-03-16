@@ -5,8 +5,6 @@
     services.syncthing = {
         enable = true;
         openDefaultPorts = true;
-        user = "jack";
-        dataDir = "/home/jack";
     };
 
     networking.firewall.allowedTCPPorts = [ 8384 ];
