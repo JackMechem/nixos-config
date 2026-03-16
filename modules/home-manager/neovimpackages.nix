@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ pkgs, ... }:
 
 {
     programs.neovim = {
@@ -23,6 +23,16 @@
             nixfmt
             # clang
             clang-tools
+            # java
+            jdt-language-server
+            jdk21
+            # rust
+            rust-analyzer
+            rustc
+            cargo
+            rustfmt
+            taplo # LSP for TOML
+            clippy
         ];
     };
 }

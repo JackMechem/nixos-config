@@ -120,7 +120,7 @@
                 misc = {
                     force_default_wallpaper = 0;
                 };
-
+                
                 # --- Keybinds ---
                 bind = [
                     # System/Rice
