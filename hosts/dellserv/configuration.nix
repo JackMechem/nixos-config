@@ -10,6 +10,7 @@
         ./hardware-configuration.nix
         inputs.home-manager.nixosModules.default
         ../../modules/nixos/user-jack.nix
+        ../../modules/nixos/syncthing.nix
     ];
 
   # Use the systemd-boot EFI boot loader.

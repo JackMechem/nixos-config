@@ -16,6 +16,7 @@
         ../../modules/nixos/system-packages.nix
         ../../modules/nixos/user-jack.nix
         ../../modules/nixos/sound.nix
+        ../../modules/nixos/syncthing.nix
     ];
 
     boot.loader.systemd-boot.enable = true;
