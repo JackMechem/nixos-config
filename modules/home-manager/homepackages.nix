@@ -23,6 +23,10 @@
         zlib
         deno
 
+        ### System Monitoring Tools
+        mission-center
+        htop
+
         ### Development Tools
         jetbrains.idea
         jetbrains-toolbox
