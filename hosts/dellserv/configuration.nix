@@ -19,6 +19,7 @@
 
   networking.hostName = "dell-xps-nixos-serv"; # Define your hostname.
   networking.networkmanager.enable = true;
+  networking.firewall.allowedTCPPorts = [ 80 3000 443 22 ];
 
   nix.settings.experimental-features = [
       "nix-command"
@@ -37,6 +38,17 @@
 
   services.openssh.enable = true;
 
+##  services.nginx = {
+##      enable = true;
+##      virtualHosts."your.domain.or.ip" = {
+##        locations."/" = {
+##          proxyPass = "http://127.0.0.1:3000";
+##          proxyWebsockets = true;
+##        };
+##      };
+##  };
+
+  boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
   home-manager = {
       extraSpecialArgs = { inherit inputs; };
       users = {
