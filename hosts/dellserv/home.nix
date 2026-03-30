@@ -11,6 +11,7 @@
     ../../modules/home-manager/zsh.nix
     ../../modules/home-manager/tmux.nix
     ../../modules/home-manager/shell-aliases.nix
+    ../../modules/home-manager/neovimpackages.nix
   ];
 
   programs.home-manager.enable = true;
