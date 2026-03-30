@@ -18,10 +18,10 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
         server-dash = {
-            url = "github:JackMechem/server-dash";
+            url = "path:/home/jack/Projects/server-dash";
         };
         server-dash-api = {
-            url = "github:JackMechem/server-dash-api";
+            url = "path:/home/jack/Projects/server-dash-api";
         };
     };
 
