@@ -18,6 +18,7 @@
         ../../modules/nixos/sound.nix
         ../../modules/nixos/print.nix
         ../../modules/nixos/syncthing.nix
+        ../../modules/nixos/ollama.nix
     ];
 
     boot.loader.systemd-boot.enable = true;
@@ -27,6 +28,8 @@
 
     networking.hostName = "jackdesk";
     networking.networkmanager.enable = true;
+
+    networking.firewall.allowedTCPPorts = [ 2200 3000 ];
 
     nix.settings.experimental-features = [
         "nix-command"
@@ -73,7 +76,10 @@
 
     services.libinput.enable = true;
 
-    services.openssh.enable = true;
+    services.openssh = {
+        enable = true;
+        listenAddresses = [{ addr = "192.168.1.67"; port = 2200; }];
+    };
 
     services.gvfs.enable = true;
 
