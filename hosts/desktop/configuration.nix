@@ -48,8 +48,12 @@
 
     nixpkgs.config.allowUnfree = true;
 
-    services.gtkapps.enable = true;
+    #    services.gtkapps.enable = true;
     services.gtkbar.enable = true;
+
+    environment.systemPackages = [
+      inputs.rust-app-menu.packages.${pkgs.system}.default
+    ];
 
     #  services.midirun = {
     #        enable = true;

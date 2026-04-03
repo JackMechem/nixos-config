@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
     home.packages = with pkgs; [
         ### Desktop Stuff
@@ -36,6 +36,6 @@
         ### Development Tools
         jdk
         gnumake
-        claude-code
+        inputs.claude-code.packages.${pkgs.system}.claude-code
     ];
 }

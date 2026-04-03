@@ -10,12 +10,12 @@
             # javascript/typescript/react
             nodejs_20
             typescript
-            nodePackages.typescript-language-server
-            nodePackages.vscode-langservers-extracted
-            nodePackages.bash-language-server
-            nodePackages.prettier
-            nodePackages.eslint_d
-            nodePackages.eslint
+            typescript-language-server
+            vscode-langservers-extracted
+            bash-language-server
+            prettier
+            eslint_d
+            eslint
             # nix
             nil
             nixd

@@ -46,6 +46,8 @@
       package = pkgs.kanagawa-gtk-theme;
     };
 
+    gtk4.theme = config.gtk.theme;
+
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
