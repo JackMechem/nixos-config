@@ -1,36 +1,39 @@
 { pkgs, ... }:
 {
-    home.packages = with pkgs; [
-        ### Desktop Stuff
-        pkgs.sway-contrib.grimshot
-        waypaper
-        hyprpaper
-        swaybg
+  home.packages = with pkgs; [
+    ### Desktop Stuff
+    pkgs.sway-contrib.grimshot
+    waypaper
+    hyprpaper
+    swaybg
 
-        ### Audio
-        playerctl
-        spotify
-        pavucontrol
+    ### Audio
+    playerctl
+    spotify
+    pavucontrol
 
-        ### Chat apps
-        lunar-client
-        discord
-        zoom-us
+    ### Chat apps
+    lunar-client
+    discord
+    zoom-us
 
-        ### Random Libraries and Dependencies
-        gtk3
-        glib
-        zlib
-        deno
+    ### Random Libraries and Dependencies
+    gtk3
+    glib
+    zlib
+    deno
 
-        ### System Monitoring Tools
-        mission-center
-        htop
+    ### System Monitoring Tools
+    mission-center
+    htop
 
-        ### Development Tools
-        jetbrains.idea
-        jetbrains-toolbox
-        jdk
-        gnumake
-    ];
+    ### Development Tools
+    jetbrains.idea
+    jetbrains-toolbox
+    jdk
+    gnumake
+
+    ### Note taking tools
+    obsidian
+  ];
 }

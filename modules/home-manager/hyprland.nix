@@ -32,6 +32,7 @@
         exec-once = [
           "waypaper --restore"
           "gtkbar"
+          "rust-app-menu"
           "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
           "solaar -w hide"
         ];
@@ -39,7 +40,7 @@
         # --- Variables ---
         "$terminal" = "ghostty";
         "$fileManager" = "thunar";
-        "$menu" = "gtkapps";
+        "$menu" = "rust-app-menu";
 
         env = [
           "XCURSOR_SIZE,24"
@@ -51,7 +52,7 @@
           kb_layout = "us";
           kb_options = "caps:escape";
           follow_mouse = 1;
-          mouse_refocus = false;
+          mouse_refocus = true;
           touchpad = {
             natural_scroll = "no";
           };
@@ -74,6 +75,12 @@
           layout = "dwindle";
           allow_tearing = false;
         };
+
+        # --- Fix Zoom ---
+        windowrule = [
+          "match:class ^(zoom)$, no_follow_mouse 1"
+          "match:class ^(zoom)$, suppress_event maximize"
+        ];
 
         # --- Decoration ---
         decoration = {
