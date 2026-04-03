@@ -33,10 +33,6 @@
         };
     };
 
-    home.packages = with pkgs; [
-        claude-code
-    ];
-
     home.sessionVariables = {
         EDITOR = "nvim";
     };

@@ -20,6 +20,9 @@
 
         rust-app-menu.url = "github:JackMechem/rust-app-menu";
         rust-app-menu.inputs.nixpkgs.follows = "nixpkgs";
+        server-dash.url = "github:JackMechem/server-dash";
+        server-dash-api.url = "github:JackMechem/server-dash-api";
+
         claude-code.url = "github:sadjow/claude-code-nix";
     };
 
@@ -48,8 +51,8 @@
                 modules = [
                     ./hosts/dellserv/configuration.nix
                     inputs.home-manager.nixosModules.default
-                    (builtins.getFlake "path:/home/jack/Projects/server-dash").nixosModules.default
-                    (builtins.getFlake "path:/home/jack/Projects/server-dash-api").nixosModules.default
+                    inputs.server-dash.nixosModules.default
+                    inputs.server-dash-api.nixosModules.default
                 ];
             };
         };

@@ -106,6 +106,42 @@
         "type": "github"
       }
     },
+    "flake-utils_5": {
+      "inputs": {
+        "systems": "systems_5"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_6": {
+      "inputs": {
+        "systems": "systems_6"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "gtkapps": {
       "inputs": {
         "flake-utils": "flake-utils_2",
@@ -151,19 +187,11 @@
         ]
       },
       "locked": {
-<<<<<<< Updated upstream
         "lastModified": 1775247674,
         "narHash": "sha256-MCaiC3iWarAsmu8KJXgJHb1H8lf+BD9gymvxkbmNVdc=",
         "owner": "nix-community",
         "repo": "home-manager",
         "rev": "03bdcf84f092956943dcf9ef164481e463512716",
-=======
-        "lastModified": 1774898676,
-        "narHash": "sha256-0Utnqo+FbB+0CVUi0MI3oonF0Kuzy9VcgRkxl53Euvk=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "a184bd2f8426087bae93f203403cd4b86c99e57d",
->>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -227,19 +255,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-<<<<<<< Updated upstream
         "lastModified": 1752950548,
         "narHash": "sha256-NS6BLD0lxOrnCiEOcvQCDVPXafX1/ek1dfJHX1nUIzc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "c87b95e25065c028d31a94f06a62927d18763fdf",
-=======
-        "lastModified": 1774709303,
-        "narHash": "sha256-D3Q07BbIA2KnTcSXIqqu9P586uWxN74zNoCH3h2ESHg=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685",
->>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -251,23 +271,47 @@
     },
     "nixpkgs_4": {
       "locked": {
-<<<<<<< Updated upstream
         "lastModified": 1775036866,
         "narHash": "sha256-ZojAnPuCdy657PbTq5V0Y+AHKhZAIwSIT2cb8UgAz/U=",
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "6201e203d09599479a3b3450ed24fa81537ebc4e",
-=======
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_5": {
+      "locked": {
         "lastModified": 1774709303,
         "narHash": "sha256-D3Q07BbIA2KnTcSXIqqu9P586uWxN74zNoCH3h2ESHg=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685",
->>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_6": {
+      "locked": {
+        "lastModified": 1774386573,
+        "narHash": "sha256-4hAV26quOxdC6iyG7kYaZcM3VOskcPUrdCQd/nx8obc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "46db2e09e1d3f113a13c0d7b81e2f221c63b8ce9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
         "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
@@ -281,6 +325,8 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_4",
         "rust-app-menu": "rust-app-menu",
+        "server-dash": "server-dash",
+        "server-dash-api": "server-dash-api",
         "zen-browser": "zen-browser"
       }
     },
@@ -328,42 +374,66 @@
         "type": "github"
       }
     },
-<<<<<<< Updated upstream
-=======
-    "server-dash": {
+    "rust-overlay_2": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": [
+          "server-dash-api",
+          "nixpkgs"
+        ]
       },
       "locked": {
-        "lastModified": 1774925677,
-        "narHash": "sha256-uQsPhHbC2saTnbKRQ2yjIYiyHhoxisT/z8MY2vBNQlM=",
-        "path": "/home/jack/Projects/server-dash",
-        "type": "path"
+        "lastModified": 1774667365,
+        "narHash": "sha256-+JamhonkPyti+oqfl1ySAyF2L02adhCEcdZOzpSukq8=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "98caaa8cd1fbcc45913d1bb2b7fbabcf3e8d967a",
+        "type": "github"
       },
       "original": {
-        "path": "/home/jack/Projects/server-dash",
-        "type": "path"
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "server-dash": {
+      "inputs": {
+        "flake-utils": "flake-utils_5",
+        "nixpkgs": "nixpkgs_5"
+      },
+      "locked": {
+        "lastModified": 1774932258,
+        "narHash": "sha256-TCvJhfJeAXTGG+kgp5gw8OaOTyMsgxi3Y4MTBEHrxoI=",
+        "owner": "JackMechem",
+        "repo": "server-dash",
+        "rev": "ede90f8c7fc5c143191f37920999244c87a73e62",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JackMechem",
+        "repo": "server-dash",
+        "type": "github"
       }
     },
     "server-dash-api": {
       "inputs": {
-        "flake-utils": "flake-utils_4",
-        "nixpkgs": "nixpkgs_5",
-        "rust-overlay": "rust-overlay"
+        "flake-utils": "flake-utils_6",
+        "nixpkgs": "nixpkgs_6",
+        "rust-overlay": "rust-overlay_2"
       },
       "locked": {
-        "lastModified": 1774926495,
-        "narHash": "sha256-JkZHG8CddKZGNg61n5euW5akEXJUiEoFkEnrpAH6Em0=",
-        "path": "/home/jack/Projects/server-dash-api",
-        "type": "path"
+        "lastModified": 1775019268,
+        "narHash": "sha256-vMZr3B2vpoO33YyHFsxOKMfW/A+GVigzcdYYa+ghHL0=",
+        "owner": "JackMechem",
+        "repo": "server-dash-api",
+        "rev": "6c6ee030cd0775178bed3f3fc1c83b23a75071f5",
+        "type": "github"
       },
       "original": {
-        "path": "/home/jack/Projects/server-dash-api",
-        "type": "path"
+        "owner": "JackMechem",
+        "repo": "server-dash-api",
+        "type": "github"
       }
     },
->>>>>>> Stashed changes
     "systems": {
       "locked": {
         "lastModified": 1681028828,
@@ -424,6 +494,36 @@
         "type": "github"
       }
     },
+    "systems_5": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_6": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "zen-browser": {
       "inputs": {
         "home-manager": "home-manager_2",
@@ -432,19 +532,11 @@
         ]
       },
       "locked": {
-<<<<<<< Updated upstream
         "lastModified": 1775237696,
         "narHash": "sha256-gECGt/SbcrGQZjeIYKY6WQtyaoLucOoEV8bpJaDVsEQ=",
         "owner": "0xc000022070",
         "repo": "zen-browser-flake",
         "rev": "9968536e8ee4f715554dfc994b5399982bcec9e5",
-=======
-        "lastModified": 1774848370,
-        "narHash": "sha256-Esm+aiabP563BcUFfFUCIOlFaTxKUXPp6jw0LMAV7ik=",
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake",
-        "rev": "712c476500e96df74276be99bb3fa9631f494f3a",
->>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
