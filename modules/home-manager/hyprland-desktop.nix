@@ -46,7 +46,7 @@
                 # --- Variables ---
                 "$terminal" = "ghostty";
                 "$fileManager" = "thunar";
-                "$menu" = "rust-app-menu -s";
+                "$menu" = "rust-app-menu -ds";
 
                 env = [
                     "XCURSOR_SIZE,24"
@@ -80,6 +80,11 @@
                 windowrule = [
                     "match:class ^(zoom)$, no_follow_mouse 1"
                     "match:class ^(zoom)$, suppress_event maximize"
+                ];
+
+                layerrule = [
+                    "blur on, match:namespace Launcher"
+                    "ignore_alpha 0.3, match:namespace Launcher"
                 ];
 
                 # --- Decoration ---
@@ -121,7 +126,7 @@
                 misc = {
                     force_default_wallpaper = 0;
                 };
-                
+
                 # --- Keybinds ---
                 bind = [
                     # System/Rice

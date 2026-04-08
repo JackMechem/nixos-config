@@ -340,11 +340,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1775687254,
-        "narHash": "sha256-7qI4HrcNp3k43mwFLwecMXzLs8HwLGyqs+uJDjKmVH8=",
+        "lastModified": 1775688550,
+        "narHash": "sha256-HHgYDeJl6G8HCSruMxAGGPpR+NqobZibcJ8VuV+2Qw0=",
         "owner": "JackMechem",
         "repo": "rust-app-menu",
-        "rev": "d8ab0f945cb2315ec95b6649ac6b041e84f5bc97",
+        "rev": "f780a0e32f3c2bdee4051cd3f91d95387bf41e99",
         "type": "github"
       },
       "original": {
