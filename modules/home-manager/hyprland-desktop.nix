@@ -38,7 +38,7 @@
                 exec-once = [
                     "waypaper --restore"
                     "gtkbar"
-                    "rust-app-menu"
+                    "rust-app-menu -d"
                     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
                     "solaar -w hide"
                 ];
@@ -46,7 +46,7 @@
                 # --- Variables ---
                 "$terminal" = "ghostty";
                 "$fileManager" = "thunar";
-                "$menu" = "rust-app-menu";
+                "$menu" = "rust-app-menu -s";
 
                 env = [
                     "XCURSOR_SIZE,24"
