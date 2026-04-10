@@ -167,11 +167,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1774395694,
-        "narHash": "sha256-3lgJc02mSjwoFF4rmot3TLKkXAfG7EOOQG2pXn1XwgI=",
+        "lastModified": 1775764670,
+        "narHash": "sha256-fHgivp342pVm6K3xB+HB6WkGKV3x3hX5qxtFQmwMPs8=",
         "owner": "JackMechem",
         "repo": "gtkbar",
-        "rev": "79161abfc138d7ccbb1d0207dc1c15e8d5220179",
+        "rev": "b673083080685f0827c52a0c9a660419023ab1e1",
         "type": "github"
       },
       "original": {
