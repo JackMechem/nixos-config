@@ -1,19 +1,65 @@
 {
-  config,
-  lib,
-  pkgs,
-  ...
+    config,
+    lib,
+    pkgs,
+    ...
 }:
 
+let
+    aliases = [
+        {
+            name = "nixrebt";
+            cmd = "sudo nixos-rebuild switch --flake /home/jack/nixos/#t480";
+            desc = "Rebuild NixOS config for t480";
+        }
+        {
+            name = "nixrebd";
+            cmd = "sudo nixos-rebuild switch --flake /home/jack/nixos/#desktop";
+            desc = "Rebuild NixOS config for desktop";
+        }
+        {
+            name = "nixrebs";
+            cmd = "sudo nixos-rebuild switch --flake /home/jack/nixos/#dellserv";
+            desc = "Rebuild NixOS config for dellserv";
+        }
+        {
+            name = "nd";
+            cmd = "nix develop -c zsh";
+            desc = "Enter nix dev shell with zsh";
+        }
+        {
+            name = "v";
+            cmd = "nvim";
+            desc = "Neovim";
+        }
+        {
+            name = "c";
+            cmd = "clear";
+            desc = "Clear terminal";
+        }
+        {
+            name = "cl";
+            cmd = "clear && ls";
+            desc = "Clear and list files";
+        }
+        {
+            name = "nixconf";
+            cmd = "nvim ~/nixos/";
+            desc = "Open nixos config in nvim";
+        }
+    ];
+
+    helpText = lib.concatMapStringsSep "\\n" (a: " ${a.name} -> ${a.desc}") aliases;
+
+    aliasAttrs = lib.listToAttrs (
+        map (a: {
+            name = a.name;
+            value = a.cmd;
+        }) aliases
+    );
+in
 {
-  home.shellAliases = {
-    nixrebt = "sudo nixos-rebuild switch --flake /home/jack/nixos/#t480";
-    nixrebd = "sudo nixos-rebuild switch --flake /home/jack/nixos/#desktop";
-    nixrebs = "sudo nixos-rebuild switch --flake /home/jack/nixos/#dellserv";
-    v = "nvim";
-    c = "clear";
-    cl = "clear && ls";
-    nixconf = "nvim ~/nixos/";
-    a = ''echo -e " a -> List aliases\n nixreb[t,d] -> Rebuild nixos config [t for #t480, d for #dektop]\n nixconf -> Open nixos config\n v -> nvim\n c -> clear\n cl -> clear && ls"'';
-  };
+    home.shellAliases = aliasAttrs // {
+        a = ''echo -e "${helpText}\n a          -> List aliases"'';
+    };
 }
