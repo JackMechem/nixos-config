@@ -37,5 +37,8 @@
         jdk
         gnumake
         inputs.claude-code.packages.${pkgs.system}.claude-code
+
+        ### My Stuff
+        inputs.hyprmwh.packages.${pkgs.system}.default
     ];
 }

@@ -38,7 +38,6 @@
                 exec-once = [
                     "waypaper --restore"
                     "gtkbar"
-                    "rust-app-menu -d"
                     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
                     "solaar -w hide"
                 ];
@@ -46,7 +45,10 @@
                 # --- Variables ---
                 "$terminal" = "ghostty";
                 "$fileManager" = "thunar";
-                "$menu" = "rust-app-menu -ds";
+                "$appMenu" = "hyprmwh --apps";
+                "$windowMoveMenu" = "hyprmwh --windows";
+                "$browser" = "zen-twilight";
+                #"$menu" = "rust-app-menu -ds";
 
                 env = [
                     "XCURSOR_SIZE,24"
@@ -84,7 +86,9 @@
 
                 layerrule = [
                     "blur on, match:namespace Launcher"
-                    "ignore_alpha 0.3, match:namespace Launcher"
+                    "ignore_alpha 0.1, match:namespace Launcher"
+                    "blur on, match:namespace hyprmwh"
+                    "ignore_alpha 0.1, match:namespace hyprmwh"
                 ];
 
                 # --- Decoration ---
@@ -127,19 +131,19 @@
                     force_default_wallpaper = 0;
                 };
 
-                # --- Keybinds ---
+                # --- Keybinds --- 
                 bind = [
                     # System/Rice
-                    "${mainMod}, grave, exec, rice-settings"
                     "${mainMod}, RETURN, exec, $terminal"
                     "${mainMod} SHIFT, RETURN, exec, [float] $terminal"
                     "${mainMod}, Q, killactive"
                     "${mainMod} SHIFT, M, exit"
                     "${mainMod}, E, exec, $fileManager"
                     "${mainMod} SHIFT, E, exec, [float] $fileManager"
-                    "${mainMod}, W, exec, zen-browser"
+                    "${mainMod}, W, exec, $browser"
                     "${mainMod}, TAB, togglefloating"
-                    "${mainMod}, SPACE, exec, $menu"
+                    "${mainMod}, SPACE, exec, $appMenu"
+                    "${mainMod}, grave, exec, $windowMoveMenu"
                     "${mainMod}, P, pseudo"
                     "${mainMod}, V, togglesplit"
                     "${mainMod}, M, fullscreen, 1"

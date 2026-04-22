@@ -5,6 +5,7 @@
         nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
         gtkapps.url = "github:JackMechem/gtkapps";
         gtkbar.url = "github:JackMechem/gtkbar";
+        hyprmwh.url = "github:JackMechem/hyprmwh";
         #    midirun.url = "path:/home/jack/Projects/midirun";
 
         zen-browser = {
