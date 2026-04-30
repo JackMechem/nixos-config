@@ -42,6 +42,8 @@
 
     programs.zsh.enable = true;
 
+    programs.nix-ld.enable = true;
+
     programs.thunar.enable = true;
 
     programs.dconf.enable = true;
@@ -82,10 +84,11 @@
 
     services.openssh = {
         enable = true;
-        listenAddresses = [{ addr = "192.168.1.67"; port = 2200; }];
     };
 
     services.gvfs.enable = true;
+
+    services.input-remapper.enable = true;
 
     system.stateVersion = "25.11";
 

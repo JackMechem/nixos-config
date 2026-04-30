@@ -15,8 +15,13 @@
 
     nixpkgs.config.allowUnfree = true;
 
+    nixpkgs.config.permittedInsecurePackages = [
+        "openclaw-2026.3.12"
+    ];
+
     environment.systemPackages = with pkgs; [
         ollama
         rocmPackages.rocminfo
+        openclaw
     ];
 }

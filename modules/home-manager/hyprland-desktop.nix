@@ -40,6 +40,8 @@
                     "gtkbar"
                     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
                     "solaar -w hide"
+                    "ydotoold"
+                    "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
                 ];
 
                 # --- Variables ---
@@ -212,6 +214,9 @@
                     # Custom scripts
                     "${mainMod}, b, exec, bash -c 'pgrep gtkbar &>/dev/null && killall gtkbar || gtkbar &'"
                     "${mainMod}, minus, exec, ~/.config/hypr/togglemonitor.sh ${monitor3}"
+
+                    # Mouse: back thumb button -> middle click (mchose mouse)
+                    ", mouse:275, exec, ydotool click 0xC2"
                 ];
 
                 bindle = [

@@ -117,6 +117,23 @@
 
   home.sessionVariables = {
     EDITOR = "nvim";
+    # claw-code: route to local Ollama instead of Anthropic/OpenAI
+    OPENAI_BASE_URL = "http://127.0.0.1:11434/v1";
+    OPENAI_API_KEY = "ollama";
+  };
+
+  systemd.user.services.ydotoold = {
+    Unit = {
+      Description = "ydotool daemon";
+      After = [ "default.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.ydotool}/bin/ydotoold";
+      Restart = "always";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
   };
 
 }
