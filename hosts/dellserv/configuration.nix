@@ -17,6 +17,7 @@
         inputs.home-manager.nixosModules.default
         ../../modules/nixos/user-jack.nix
         ../../modules/nixos/syncthingServer.nix
+        ../../modules/nixos/yubikey-auth.nix
     ];
 
     # Use the systemd-boot EFI boot loader.
@@ -52,14 +53,9 @@
     services.openssh.enable = true;
 
     services.openssh.settings = {
-        PasswordAuthentication = true;
-        KbdInteractiveAuthentication = true;
-        ChallengeResponseAuthentication = true;
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
     };
-
-    # 2FA
-    security.pam.services.login.googleAuthenticator.enable = true;
-    security.pam.services.sshd.googleAuthenticator.enable = true;
 
     ##  services.nginx = {
     ##      enable = true;
@@ -138,7 +134,7 @@
         unzip
         python3
         nodejs
-        google-authenticator
+        inputs.claude-code.packages.${pkgs.system}.claude-code
     ];
 
     virtualisation.docker.enable = true;
