@@ -6,16 +6,10 @@
     libfido2
   ];
 
-  # sudo authenticates via the forwarded SSH agent.
-  # Requires: ssh -A when connecting, and an ed25519-sk key in your agent.
-  # Generate one locally if you haven't:
+  # Only FIDO2-backed SSH keys (ed25519-sk / ecdsa-sk) are accepted.
+  # Every SSH login to every account requires a YubiKey touch.
+  # Add your sk public key to ~/.ssh/authorized_keys before deploying:
   #   ssh-keygen -t ed25519-sk
-  # Then add the public key to ~/.ssh/authorized_keys on the server.
-  security.pam.sshAgentAuth.enable = true;
-  security.pam.services.sudo.sshAgentAuth = true;
-
-  # Preserve the forwarded agent socket across the sudo boundary
-  security.sudo.extraConfig = ''
-    Defaults env_keep+=SSH_AUTH_SOCK
-  '';
+  #   ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub jack@dellserv
+  services.openssh.settings.PubkeyAcceptedAlgorithms = "sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com";
 }
