@@ -107,6 +107,11 @@
                 }
             '';
         };
+        virtualHosts."git.jackmechem.dev" = {
+            extraConfig = ''
+                reverse_proxy localhost:3002
+            '';
+        };
     };
 
     services.server-dash = {
@@ -116,6 +121,19 @@
     services.server-dash-api = {
         enable = true;
         useNixBuild = false;
+    };
+
+    services.forgejo = {
+        enable = true;
+        settings = {
+            server = {
+                DOMAIN = "git.jackmechem.dev";
+                HTTP_PORT = 3002;
+                ROOT_URL = "https://git.jackmechem.dev";
+                SSH_DOMAIN = "gitssh.jackmechem.dev";
+                SSH_PORT = 22;
+            };
+        };
     };
 
     # Make sure jack is in the shadow group
