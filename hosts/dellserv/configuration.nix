@@ -61,6 +61,10 @@
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
     };
+    services.openssh.extraConfig = ''
+        Match User forgejo
+            PubkeyAcceptedAlgorithms +ssh-ed25519
+    '';
 
     ##  services.nginx = {
     ##      enable = true;
