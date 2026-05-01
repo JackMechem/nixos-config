@@ -27,6 +27,7 @@
 
   networking.hostName = "t480";
   networking.networkmanager.enable = true;
+  networking.nameservers = [ "192.168.1.164" ];
 
   nix.settings = {
     # Use all cores for building

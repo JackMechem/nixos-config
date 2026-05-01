@@ -26,6 +26,9 @@
 
     networking.hostName = "dell-xps-nixos-serv"; # Define your hostname.
     networking.networkmanager.enable = true;
+    networking.hosts = {
+        "127.0.0.1" = [ "gitssh.jackmechem.dev" ];
+    };
     networking.firewall.allowedTCPPorts = [
         80
         3000
@@ -33,7 +36,9 @@
         8080
         443
         22
+        53
     ];
+    networking.firewall.allowedUDPPorts = [ 53 ];
 
     nix.settings.experimental-features = [
         "nix-command"
@@ -112,6 +117,11 @@
                 reverse_proxy localhost:3002
             '';
         };
+        virtualHosts."adguard.jackmechem.dev" = {
+            extraConfig = ''
+                reverse_proxy localhost:3003
+            '';
+        };
     };
 
     services.server-dash = {
@@ -121,6 +131,25 @@
     services.server-dash-api = {
         enable = true;
         useNixBuild = false;
+    };
+
+    services.resolved.settings.Resolve.DNSStubListener = "no";
+
+    services.adguardhome = {
+        enable = true;
+        mutableSettings = false;
+        port = 3003;
+        settings = {
+            http.address = lib.mkForce "127.0.0.1:3003";
+            dns = {
+                bind_hosts = [ "0.0.0.0" ];
+                port = 53;
+                bootstrap_dns = [
+                    "9.9.9.10"
+                    "149.112.112.10"
+                ];
+            };
+        };
     };
 
     services.forgejo = {

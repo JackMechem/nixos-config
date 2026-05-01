@@ -28,6 +28,7 @@
 
     networking.hostName = "jackdesk";
     networking.networkmanager.enable = true;
+    networking.nameservers = [ "192.168.1.164" ];
 
     networking.firewall.allowedTCPPorts = [ 2200 3000 ];
 
