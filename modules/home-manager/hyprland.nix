@@ -1,5 +1,127 @@
 { pkgs, ... }:
 {
+    programs.hyprlock = {
+        enable = true;
+        settings = {
+            general = {
+                disable_loading_bar = true;
+                grace = 0;
+                hide_cursor = true;
+            };
+            background = [{
+                monitor = "";
+                path = "screenshot";
+                blur_passes = 3;
+                blur_size = 8;
+                brightness = 0.5;
+            }];
+            label = [
+                {
+                    monitor = "";
+                    text = "Property of Jack Mechem — 702.201.4608";
+                    color = "rgba(c5c9c5ff)";
+                    font_size = 22;
+                    font_family = "JetBrainsMono Nerd Font Bold";
+                    position = "0, 200";
+                    halign = "center";
+                    valign = "center";
+                }
+                {
+                    monitor = "";
+                    text = "If found — please contact me and return it ASAP.";
+                    color = "rgba(c5c9c5ff)";
+                    font_size = 13;
+                    font_family = "JetBrainsMono Nerd Font";
+                    position = "0, 166";
+                    halign = "center";
+                    valign = "center";
+                }
+                {
+                    monitor = "";
+                    text = "If stolen — fuck you.";
+                    color = "rgba(c4746eff)";
+                    font_size = 16;
+                    font_family = "JetBrainsMono Nerd Font Bold";
+                    position = "0, 138";
+                    halign = "center";
+                    valign = "center";
+                }
+                {
+                    monitor = "";
+                    text = "The drive is encrypted and the BIOS is locked. You'll get maybe $150 for it.";
+                    color = "rgba(c5c9c580)";
+                    font_size = 11;
+                    font_family = "JetBrainsMono Nerd Font";
+                    position = "0, 112";
+                    halign = "center";
+                    valign = "center";
+                }
+                {
+                    monitor = "";
+                    text = "Contact me now and I won't involve the police. I also have a GPS tracker installed.";
+                    color = "rgba(c5c9c580)";
+                    font_size = 11;
+                    font_family = "JetBrainsMono Nerd Font";
+                    position = "0, 94";
+                    halign = "center";
+                    valign = "center";
+                }
+                {
+                    monitor = "";
+                    text = "If you're in my class messing with this — fuck you too, don't touch my shit.";
+                    color = "rgba(c5c9c5ff)";
+                    font_size = 11;
+                    font_family = "JetBrainsMono Nerd Font";
+                    position = "0, 76";
+                    halign = "center";
+                    valign = "center";
+                }
+            ];
+            input-field = [{
+                monitor = "";
+                size = "250, 50";
+                outline_thickness = 2;
+                dots_size = 0.33;
+                dots_spacing = 0.15;
+                dots_center = true;
+                outer_color = "rgba(e4687690)";
+                inner_color = "rgba(181616cc)";
+                font_color = "rgba(c5c9c5ff)";
+                fade_on_empty = true;
+                placeholder_text = "<i>Password...</i>";
+                rounding = 12;
+                check_color = "rgba(8a9a7bff)";
+                fail_color = "rgba(c4746eff)";
+                fail_text = "<i>$FAIL ($ATTEMPTS)</i>";
+                position = "0, 0";
+                halign = "center";
+                valign = "center";
+            }];
+        };
+    };
+
+    services.hypridle = {
+        enable = true;
+        settings = {
+            general = {
+                before_sleep_cmd = "loginctl lock-session";
+                after_sleep_cmd = "hyprctl dispatch dpms on";
+                lock_cmd = "pidof hyprlock || hyprlock";
+            };
+            listener = [
+                {
+                    timeout = 300;
+                    on-timeout = "loginctl lock-session";
+                }
+                {
+                    timeout = 600;
+                    on-timeout = "hyprctl dispatch dpms off";
+                    on-resume = "hyprctl dispatch dpms on";
+                }
+            ];
+        };
+    };
+
     wayland.windowManager.hyprland = {
         enable = true;
 
@@ -130,6 +252,7 @@
                 # --- Keybinds ---
                 bind = [
                     # System/Rice
+                    "${mainMod} SHIFT, D, exec, loginctl lock-session"
                     "${mainMod}, grave, exec, rice-settings"
                     "${mainMod}, RETURN, exec, $terminal"
                     "${mainMod} SHIFT, RETURN, exec, [float] $terminal"

@@ -14,10 +14,13 @@
   security.pam.u2f = {
     enable = true;
     control = "required";
-    cue = true;
-    authFile = "/etc/u2f-mappings";
+    settings = {
+      cue = true;
+      authfile = "/etc/u2f-mappings";
+    };
   };
 
   security.pam.services.sudo.u2fAuth = true;
   security.pam.services.login.u2fAuth = true;
+  security.pam.services.hyprlock.u2fAuth = true;
 }
