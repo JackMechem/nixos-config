@@ -9,7 +9,7 @@ let
             owner = "ultraworkers";
             repo = "claw-code";
             rev = "main";
-            hash = "sha256-y63Kx7B1q2gWUO/4/k8hUgHzuKTi+HF+cGbr1em0grs=";
+            hash = "sha256-jGJgKOMn2Un6ZbEPh+7RWB1isvFLD86HWMLKTIBMUNs=";
         };
 
         sourceRoot = "source/rust";
@@ -78,6 +78,6 @@ in
 
         ### Editors
         zed-editor
-        jetbrains.idea
+        # jetbrains.idea # Fuck InteliJ
     ];
 }
