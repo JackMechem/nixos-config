@@ -23,6 +23,7 @@
         kdePackages.polkit-kde-agent-1
         yubikey-manager
         yubioath-flutter
+        cryptsetup
     ];
 
     services.udev.packages = [ pkgs.yubikey-personalization ];
