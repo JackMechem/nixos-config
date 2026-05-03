@@ -493,11 +493,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1774932258,
-        "narHash": "sha256-TCvJhfJeAXTGG+kgp5gw8OaOTyMsgxi3Y4MTBEHrxoI=",
+        "lastModified": 1777671232,
+        "narHash": "sha256-eLLr3lON++si1Ti+NXooj/cgA6dbkLlc2BahIllTHUY=",
         "owner": "JackMechem",
         "repo": "server-dash",
-        "rev": "ede90f8c7fc5c143191f37920999244c87a73e62",
+        "rev": "c991fe7b6df55ce159754bc446efd1866dfb58b5",
         "type": "github"
       },
       "original": {
@@ -513,11 +513,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1775019268,
-        "narHash": "sha256-vMZr3B2vpoO33YyHFsxOKMfW/A+GVigzcdYYa+ghHL0=",
+        "lastModified": 1777670098,
+        "narHash": "sha256-WWObAxZIrpLa0oB9g3vcHYWr3mOdPglqjrR6uYkfruQ=",
         "owner": "JackMechem",
         "repo": "server-dash-api",
-        "rev": "6c6ee030cd0775178bed3f3fc1c83b23a75071f5",
+        "rev": "56c555d699dc692e2c58e6fcede8dda2c503c7fc",
         "type": "github"
       },
       "original": {

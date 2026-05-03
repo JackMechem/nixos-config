@@ -35,7 +35,6 @@
         8384
         8080
         443
-        22
         53
     ];
     networking.firewall.allowedUDPPorts = [ 53 ];
@@ -95,6 +94,40 @@
 
     systemd.services.caddy.serviceConfig.EnvironmentFile = "/etc/secrets/caddy-env";
 
+    # sslh multiplexes SSH and HTTPS on port 443 so git SSH works
+    # without needing port 22 open on the router.
+    # Using a manual service instead of services.sslh because the NixOS module
+    # injects extra IPv4/IPv6 listen entries that cause duplicate-bind failures.
+    environment.etc."sslh.conf".text = ''
+        foreground = true;
+        inetd = false;
+        numeric = true;
+        transparent = false;
+        timeout = 2;
+        log_level = 0;
+        verbose-connections = 0;
+
+        listen = ({ host = "0.0.0.0"; port = "443"; });
+
+        protocols = (
+            { name = "ssh";     host = "127.0.0.1"; port = "22"; },
+            { name = "tls";     host = "127.0.0.1"; port = "4443"; },
+            { name = "anyprot"; host = "127.0.0.1"; port = "4443"; }
+        );
+    '';
+
+    systemd.services.sslh = {
+        description = "sslh - protocol multiplexer";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+            ExecStart = "${pkgs.sslh}/bin/sslh-fork -F /etc/sslh.conf";
+            Restart = "on-failure";
+            RestartSec = "3s";
+            Type = "simple";
+        };
+    };
+
     services.caddy = {
         enable = true;
         package = pkgs.caddy.withPlugins {
@@ -102,15 +135,25 @@
             hash = "sha256-Olz4W84Kiyldy+JtbIicVCL7dAYl4zq+2rxEOUTObxA=";
         };
         globalConfig = ''
+            auto_https disable_redirects
             acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+            https_port 4443
+            http_port 4480
         '';
         virtualHosts."dashboard.jackmechem.dev" = {
             extraConfig = ''
-                reverse_proxy localhost:3000
+                bind 127.0.0.1
+                handle /auth/* {
+                    reverse_proxy localhost:3001
+                }
+                handle {
+                    reverse_proxy localhost:3000
+                }
             '';
         };
         virtualHosts."syncthing.jackmechem.dev" = {
             extraConfig = ''
+                bind 127.0.0.1
                 reverse_proxy localhost:8384 {
                   header_up Host {upstream_hostport}
                 }
@@ -118,11 +161,13 @@
         };
         virtualHosts."git.jackmechem.dev" = {
             extraConfig = ''
+                bind 127.0.0.1
                 reverse_proxy localhost:3002
             '';
         };
         virtualHosts."adguard.jackmechem.dev" = {
             extraConfig = ''
+                bind 127.0.0.1
                 reverse_proxy localhost:3003
             '';
         };
@@ -132,6 +177,8 @@
         enable = true;
         package = "/var/lib/server-dash/build";
     };
+
+    systemd.services.server-dash.environment.ENROLLMENT_OPEN = "false";
     services.server-dash-api = {
         enable = true;
         useNixBuild = false;
@@ -164,7 +211,8 @@
                 HTTP_PORT = 3002;
                 ROOT_URL = "https://git.jackmechem.dev";
                 SSH_DOMAIN = "gitssh.jackmechem.dev";
-                SSH_PORT = 22;
+                SSH_PORT = 443;
+                SSH_LISTEN_PORT = 22;
             };
         };
     };

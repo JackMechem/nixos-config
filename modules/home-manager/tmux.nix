@@ -24,6 +24,7 @@
       bind - split-window -v
 
       set -s escape-time 0
+      set -g focus-events on
 
 
       # Act like vim
