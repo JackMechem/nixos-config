@@ -47,6 +47,11 @@ let
             cmd = "nvim ~/nixos/";
             desc = "Open nixos config in nvim";
         }
+        {
+            name = "sign-file";
+            cmd = "ssh-keygen -Y sign -f ~/.ssh/sign/yk-5c-nfc/id_ed25519_sk_SSH_SIGN_YUBIKEY_5C_NFC -n file";
+            desc = "Sign provided file with SSH-ED25519-SK key. Takes in one argument: sign-file document.pdf)";
+        }
     ];
 
     helpText = lib.concatMapStringsSep "\\n" (a: " ${a.name} -> ${a.desc}") aliases;
