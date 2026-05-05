@@ -178,7 +178,7 @@
         package = "/var/lib/server-dash/build";
     };
 
-    systemd.services.server-dash.environment.ENROLLMENT_OPEN = "false";
+    systemd.services.server-dash.environment.ENROLLMENT_OPEN = "true";
     services.server-dash-api = {
         enable = true;
         useNixBuild = false;
