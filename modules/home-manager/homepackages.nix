@@ -79,5 +79,9 @@ in
         ### Editors
         zed-editor
         # jetbrains.idea # Fuck InteliJ
+
+        ### Danger
+        tor-browser
+        proton-vpn
     ];
 }
