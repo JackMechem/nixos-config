@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  home.packages = [ pkgs.tmuxinator ];
+
   programs.tmux = {
     enable = true;
     baseIndex = 1;

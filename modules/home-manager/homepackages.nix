@@ -56,6 +56,7 @@ in
         glib
         zlib
         deno
+        pnpm
 
         ### System Monitoring Tools
         mission-center

@@ -71,10 +71,10 @@
 
                 # --- General ---
                 general = {
-                    gaps_in = 3;
-                    gaps_out = "10,10,10,10";
-                    border_size = 2;
-                    "col.active_border" = "rgba(e4687690)";
+                    gaps_in = 2;
+                    gaps_out = 3;
+                    border_size = 1;
+                    "col.active_border" = "rgba(ffffff30)";
                     "col.inactive_border" = "rgba(2c2b3180)";
                     layout = "dwindle";
                     allow_tearing = false;
@@ -104,8 +104,8 @@
                     };
                     shadow = {
                         enabled = true;
-                        range = 20;
-                        render_power = 5;
+                        range = 10;
+                        render_power = 3;
                         color = "rgba(00000040)";
                     };
                 };

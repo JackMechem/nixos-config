@@ -6,6 +6,8 @@
         gtkapps.url = "github:JackMechem/gtkapps";
         gtkbar.url = "github:JackMechem/gtkbar";
         hyprmwh.url = "github:JackMechem/hyprmwh";
+
+        diskdigger.url = "github:JackMechem/diskdigger-nix-flake";
         #    midirun.url = "path:/home/jack/Projects/midirun";
 
         zen-browser = {

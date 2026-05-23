@@ -30,7 +30,10 @@
     networking.networkmanager.enable = true;
     networking.nameservers = [ "192.168.1.164" ];
 
-    networking.firewall.allowedTCPPorts = [ 2200 3000 ];
+    networking.firewall.allowedTCPPorts = [
+        2200
+        3000
+    ];
 
     nix.settings.experimental-features = [
         "nix-command"
@@ -54,9 +57,23 @@
     #    services.gtkapps.enable = true;
     services.gtkbar.enable = true;
 
+    nixpkgs.config.allowUnfreePredicate =
+        pkg:
+        builtins.elem (pkgs.lib.getName pkg) [
+            "diskdigger"
+        ];
+
     environment.systemPackages = [
-      inputs.rust-app-menu.packages.${pkgs.system}.default
+        inputs.rust-app-menu.packages.${pkgs.system}.default
+        inputs.diskdigger.packages.${pkgs.system}.diskdigger
     ];
+
+    programs.steam = {
+        enable = true;
+        remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+        dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+        localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    };
 
     #  services.midirun = {
     #        enable = true;
