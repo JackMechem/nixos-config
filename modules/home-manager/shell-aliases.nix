@@ -54,7 +54,7 @@ let
         }
         {
             name = "tm";
-            cmd = ''tmuxinator'';
+            cmd = "tmuxinator";
             desc = "Short for tmuxinator. tm-save saves locally with provided session Other Usage: tm-save <session-name-to-copy>; smae for tm-dup";
         }
         {
@@ -79,24 +79,35 @@ in
     };
 
     programs.zsh.initContent = ''
-      ZSH_AUTOSUGGEST_USE_ASYNC=false
-      fastfetch -c examples/11
-      if [[ -n "$IN_NIX_SHELL" ]]; then
-        PROMPT="%F{blue}[nix-shell]%f $PROMPT"
-      fi
-      nix() {
-        if [[ "$1" == "develop" ]]; then
-          command nix develop -c zsh "''${@:2}"
-        else
-          command nix "$@"
+        unsetopt INTERACTIVE_COMMENTS
+        ZSH_AUTOSUGGEST_USE_ASYNC=false
+        set -o promptsubst
+        fastfetch -c examples/11
+        if [[ -n "$NIX_DEV_SHELL" ]]; then
+          PROMPT=$'%F{blue} dev#$NIX_DEV_SHELL%f\n'"$PROMPT"
+        elif [[ -n "$IN_NIX_SHELL" ]]; then
+          PROMPT=$'%F{blue} shell%f\n'"$PROMPT"
         fi
-      }
-      tm-save() {
-          tmuxinator new "$1" "$2" --local
-      }
-      tm-dup() {
-          tmuxinator new "$1" "$1" --local
-      }
+        nix() {
+          if [[ "$1" == "develop" ]]; then
+            command nix develop "''${@:2}" -c zsh
+          else
+            command nix "$@"
+          fi
+        }
+        nix-shell() {
+          if [[ "$1" == "-p" ]]; then
+            command nix-shell -p "''${@:2}" -c zsh
+          else
+            command nix "$@"
+          fi
+        }
+        tm-save() {
+            tmuxinator new "$1" "$2" --local
+        }
+        tm-dup() {
+            tmuxinator new "$1" "$1" --local
+        }
     '';
 
 }

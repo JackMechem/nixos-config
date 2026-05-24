@@ -54,6 +54,12 @@
 
     nixpkgs.config.allowUnfree = true;
 
+    programs.ssh.extraConfig = ''
+        Host gitssh.jackmechem.dev
+            IdentityFile /home/jack/.ssh/id_ed25519
+            User forgejo
+    '';
+
     services.openssh.enable = true;
 
     services.openssh.settings = {
@@ -169,6 +175,12 @@
             extraConfig = ''
                 bind 127.0.0.1
                 reverse_proxy localhost:3003
+            '';
+        };
+        virtualHosts."test.jackmechem.dev" = {
+            extraConfig = ''
+                bind 127.0.0.1
+                reverse_proxy localhost:3099
             '';
         };
     };
