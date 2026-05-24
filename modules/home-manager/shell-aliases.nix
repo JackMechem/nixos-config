@@ -52,6 +52,11 @@ let
             cmd = "ssh-keygen -Y sign -f ~/.ssh/sign/yk-5c-nfc/id_ed25519_sk_SSH_SIGN_YUBIKEY_5C_NFC -n file";
             desc = "Sign provided file with SSH-ED25519-SK key. Takes in one argument: sign-file document.pdf)";
         }
+        {
+            name = "tm-save";
+            cmd = "TMUXINATOR_CONFIG=. tmuxinator new";
+            desc = "Usage: tm-save <save-name> <session-name-to-copy>";
+        }
     ];
 
     helpText = lib.concatMapStringsSep "\\n" (a: " ${a.name} -> ${a.desc}") aliases;

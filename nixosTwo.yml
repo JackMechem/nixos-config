@@ -1,0 +1,18 @@
+---
+name: nixosTwo
+project_root: "/home/jack/nixos"
+windows:
+- vim:
+    layout: b6d7,230x53,0,0[230x40,0,0,0,230x12,0,41{115x12,0,41,4,114x12,116,41,5}]
+    panes:
+    - cd /home/jack/nixos
+    - cd /home/jack/nixos
+    - cd /home/jack/.config/tmuxinator
+- term:
+    layout: b95e,230x53,0,0,1
+    panes:
+    - cd /home/jack/nixos
+- nixos-rebuild:
+    layout: b95f,230x53,0,0,2
+    panes:
+    - cd /home/jack/nixos
