@@ -53,9 +53,14 @@ let
             desc = "Sign provided file with SSH-ED25519-SK key. Takes in one argument: sign-file document.pdf)";
         }
         {
-            name = "tm-save";
-            cmd = "TMUXINATOR_CONFIG=. tmuxinator new";
-            desc = "Usage: tm-save <save-name> <session-name-to-copy>";
+            name = "tm";
+            cmd = ''tmuxinator'';
+            desc = "Short for tmuxinator. tm-save saves locally with provided session Other Usage: tm-save <session-name-to-copy>; smae for tm-dup";
+        }
+        {
+            name = "tm-load";
+            cmd = "tmuxinator local";
+            desc = "Created and opens tmux session from yml file in the current directory. Usage: tm-load";
         }
     ];
 
@@ -72,4 +77,26 @@ in
     home.shellAliases = aliasAttrs // {
         a = ''echo -e "${helpText}\n a          -> List aliases"'';
     };
+
+    programs.zsh.initContent = ''
+      ZSH_AUTOSUGGEST_USE_ASYNC=false
+      fastfetch -c examples/11
+      if [[ -n "$IN_NIX_SHELL" ]]; then
+        PROMPT="%F{blue}[nix-shell]%f $PROMPT"
+      fi
+      nix() {
+        if [[ "$1" == "develop" ]]; then
+          command nix develop -c zsh "''${@:2}"
+        else
+          command nix "$@"
+        fi
+      }
+      tm-save() {
+          tmuxinator new "$1" "$2" --local
+      }
+      tm-dup() {
+          tmuxinator new "$1" "$1" --local
+      }
+    '';
+
 }
