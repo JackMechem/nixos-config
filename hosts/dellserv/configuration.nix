@@ -32,6 +32,7 @@
     networking.firewall.allowedTCPPorts = [
         80
         3000
+        3001
         8384
         8080
         443
@@ -150,6 +151,9 @@
             extraConfig = ''
                 bind 127.0.0.1
                 handle /auth/* {
+                    reverse_proxy localhost:3001
+                }
+                handle /smart-buttons/* {
                     reverse_proxy localhost:3001
                 }
                 handle {
