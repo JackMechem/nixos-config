@@ -39,7 +39,7 @@
 
     programs.tmux.extraConfig = ''
       set -g status-bg "colour1"
-      set -g status-fg "colour15"
+      set -g status-fg "colour0"
     '';
 
 }

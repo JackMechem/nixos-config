@@ -474,11 +474,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779506148,
-        "narHash": "sha256-OffE5yuMrSW71zIJNLvtl9MCO6WTAHEjlFPUCvkd/QM=",
+        "lastModified": 1779592685,
+        "narHash": "sha256-p9d56GezhHRf4QfANxwa1d+fvwShvjB5XUhdIl7WEd0=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "d9973e2ab49747fada06ebbe26cda27eb0220cf1",
+        "rev": "3a58b199e7c83a80b85c28044f808085ba7e941c",
         "type": "github"
       },
       "original": {
@@ -494,11 +494,11 @@
         "rust-overlay": "rust-overlay_3"
       },
       "locked": {
-        "lastModified": 1779586719,
-        "narHash": "sha256-zEkCjPV9W5UKVFqeJ53iH3kxJfuziusLBVDk/xJuSHc=",
+        "lastModified": 1779622485,
+        "narHash": "sha256-gfBf7bWodNF9yMm8jzKBvpAwBPPyOJX1KWw7pCdCSY8=",
         "ref": "refs/heads/main",
-        "rev": "24355b1a89f7306d60132a17929be86a1e161bd7",
-        "revCount": 6,
+        "rev": "fc5318fed8f6757fdc8a2172101d7708a1e8631e",
+        "revCount": 9,
         "type": "git",
         "url": "ssh://forgejo@gitssh.jackmechem.dev:443/jackmechem/server-dash-mono-repo.git"
       },
