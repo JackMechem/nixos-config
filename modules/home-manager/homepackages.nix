@@ -80,6 +80,11 @@ in
         tor-browser
         proton-vpn
 
+        # ===== Piracy =====
+        qbittorrent
+        nicotine-plus
+        jellyfin-desktop
+
         # ===== Flake Packages =====
         inputs.hyprmwh.packages.${pkgs.system}.default
     ];
