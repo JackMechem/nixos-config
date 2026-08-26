@@ -18,6 +18,8 @@
         ../../modules/nixos/user-jack.nix
         ../../modules/nixos/syncthingServer.nix
         ../../modules/nixos/yubikey-auth.nix
+        ./jellyfin.nix
+        ./filebrowser.nix
     ];
 
     # Use the systemd-boot EFI boot loader.
@@ -31,8 +33,6 @@
     };
     networking.firewall.allowedTCPPorts = [
         80
-        3000
-        3001
         8384
         8080
         443
@@ -139,7 +139,7 @@
         enable = true;
         package = pkgs.caddy.withPlugins {
             plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
-            hash = "sha256-Olz4W84Kiyldy+JtbIicVCL7dAYl4zq+2rxEOUTObxA=";
+            hash = "sha256-7GoH8YLCoPmPExQxoga2FHB58zQDoZVf1BBwkVi0SsQ=";
         };
         globalConfig = ''
             auto_https disable_redirects
@@ -147,20 +147,6 @@
             https_port 4443
             http_port 4480
         '';
-        virtualHosts."dashboard.jackmechem.dev" = {
-            extraConfig = ''
-                bind 127.0.0.1
-                handle /auth/* {
-                    reverse_proxy localhost:3001
-                }
-                handle /smart-buttons/* {
-                    reverse_proxy localhost:3001
-                }
-                handle {
-                    reverse_proxy localhost:3000
-                }
-            '';
-        };
         virtualHosts."syncthing.jackmechem.dev" = {
             extraConfig = ''
                 bind 127.0.0.1
@@ -187,17 +173,18 @@
                 reverse_proxy localhost:3099
             '';
         };
-    };
-
-    services.server-dash = {
-        enable = true;
-        package = "/var/lib/server-dash/build";
-    };
-
-    systemd.services.server-dash.environment.ENROLLMENT_OPEN = "true";
-    services.server-dash-api = {
-        enable = true;
-        useNixBuild = false;
+        virtualHosts."jellyfin.jackmechem.dev" = {
+            extraConfig = ''
+                bind 127.0.0.1
+                reverse_proxy localhost:8096
+            '';
+        };
+        virtualHosts."files.jackmechem.dev" = {
+            extraConfig = ''
+                bind 127.0.0.1
+                reverse_proxy localhost:8095
+            '';
+        };
     };
 
     services.resolved.settings.Resolve.DNSStubListener = "no";
