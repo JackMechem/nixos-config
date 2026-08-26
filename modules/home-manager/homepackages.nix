@@ -26,63 +26,61 @@ let
 in
 {
     home.packages = with pkgs; [
-        ### Desktop Stuff
-        pkgs.sway-contrib.grimshot
+
+        # ===== Desktop / Wayland =====
+        pkgs.sway-contrib.grimshot  # screenshots
         waypaper
         hyprpaper
         swaybg
 
-        ### Audio
+        # ===== Audio =====
         playerctl
-        spotify
         pavucontrol
 
-        ### Authentication
+        # ===== Authentication =====
         bitwarden-desktop
 
-        ### Chat apps
-        lunar-client
+        # ===== Communication =====
         discord
         zoom-us
 
-        ### Note Taking
+        # ===== Gaming =====
+        lunar-client
+
+        # ===== Note Taking =====
         obsidian
 
-        ### Input Remapping
-        ydotool
+        # ===== System Monitoring =====
+        mission-center
+        htop
 
-        ### Random Libraries and Dependencies
+        # ===== Development Tools =====
+        jdk
+        gnumake
+        postman
+        inputs.claude-code.packages.${pkgs.system}.claude-code
+        claw-code
+        opencode
+
+        # ===== Libraries / Runtimes =====
         gtk3
         glib
         zlib
         deno
         pnpm
 
-        ### System Monitoring Tools
-        mission-center
-        htop
-
-        ### Development Tools
-        jdk
-        gnumake
-        inputs.claude-code.packages.${pkgs.system}.claude-code
-        claw-code
-        opencode
-        postman
-
-        ### My Stuff
-        inputs.hyprmwh.packages.${pkgs.system}.default
-
-        ### Browsers
+        # ===== Browsers =====
         epiphany
         chromium
 
-        ### Editors
+        # ===== Editors =====
         zed-editor
-        # jetbrains.idea # Fuck InteliJ
 
-        ### Danger
+        # ===== Privacy / Security =====
         tor-browser
         proton-vpn
+
+        # ===== Flake Packages =====
+        inputs.hyprmwh.packages.${pkgs.system}.default
     ];
 }

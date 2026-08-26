@@ -4,11 +4,13 @@
     programs.neovim = {
         enable = true;
         extraPackages = with pkgs; [
-            # lua
+
+            # ===== Lua =====
             lua-language-server
             stylua
-            # javascript/typescript/react
-            nodejs_20
+
+            # ===== JavaScript / TypeScript / React =====
+            nodejs_22
             typescript
             typescript-language-server
             vscode-langservers-extracted
@@ -16,23 +18,29 @@
             prettier
             eslint_d
             eslint
-            # nix
+
+            # ===== Nix =====
             nil
             nixd
             alejandra
             nixfmt
-            # clang
+
+            # ===== C / C++ =====
             clang-tools
-            # java
+
+            # ===== Java =====
             jdt-language-server
             jdk21
-            # rust
+
+            # ===== Rust =====
             rust-analyzer
             rustc
             cargo
             rustfmt
-            taplo # LSP for TOML
             clippy
+
+            # ===== TOML =====
+            taplo
         ];
     };
 }

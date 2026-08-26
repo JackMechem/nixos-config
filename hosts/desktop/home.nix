@@ -1,139 +1,53 @@
 {
-  config,
-  pkgs,
-  inputs,
-  ...
+    config,
+    pkgs,
+    inputs,
+    ...
 }:
 
 {
+    imports = [
+        inputs.zen-browser.homeModules.twilight
 
-  imports = [
-    inputs.zen-browser.homeModules.twilight
-    ../../modules/home-manager/zsh.nix
-    ../../modules/home-manager/tmux.nix
-    ../../modules/home-manager/hyprland-desktop.nix
-    ../../modules/home-manager/homepackages.nix
-    ../../modules/home-manager/shell-aliases.nix
-    ../../modules/home-manager/neovimpackages.nix
-  ];
+        # --- Shell ---
+        ../../modules/home-manager/zsh.nix
+        ../../modules/home-manager/shell-aliases.nix
+        ../../modules/home-manager/tmux.nix
 
-  programs.home-manager.enable = true;
-  # Home Manager needs a bit of information about you and the paths it should
-  # manage.
-  home.username = "jack";
-  home.homeDirectory = "/home/jack";
+        # --- Desktop ---
+        ../../modules/home-manager/hyprland-desktop.nix
+        ../../modules/home-manager/theme.nix         # GTK icons + cursor
+        ../../modules/home-manager/ghostty.nix        # terminal emulator
 
-  home.stateVersion = "25.05"; # Please read the comment before changing.
+        # --- Tools ---
+        ../../modules/home-manager/ydotool.nix        # input automation daemon
+        ../../modules/home-manager/neovimpackages.nix
 
-  programs.zen-browser.enable = true;
+        # --- Packages ---
+        # Add home-manager packages in homepackages.nix
+        ../../modules/home-manager/homepackages.nix
+    ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = { };
+    programs.home-manager.enable = true;
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-    };
-  };
+    home.username = "jack";
+    home.homeDirectory = "/home/jack";
+    home.stateVersion = "25.05";
 
-  gtk = {
-    enable = true;
+    home.file = { };
+    xdg.configFile = { };
 
-    theme = {
-      name = "Kanagawa-B";
-      package = pkgs.kanagawa-gtk-theme;
+    programs.zen-browser.enable = true;
+
+    nixpkgs.config = {
+        allowUnfree = true;
+        allowUnfreePredicate = (_: true);
     };
 
-    gtk4.theme = config.gtk.theme;
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
+    home.sessionVariables = {
+        EDITOR = "nvim";
+        # Route claw-code to local Ollama instead of Anthropic/OpenAI
+        OPENAI_BASE_URL = "http://127.0.0.1:11434/v1";
+        OPENAI_API_KEY = "ollama";
     };
-  };
-
-  home.pointerCursor = {
-    gtk.enable = true;
-    x11.enable = true;
-    name = "capitaine-cursors";
-    package = pkgs.capitaine-cursors;
-    size = 32; # optional, adjust as needed
-  };
-
-  xdg.configFile = {
-    "gtk-4.0/assets".source =
-      "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/assets";
-    "gtk-4.0/gtk.css".source =
-      "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk.css";
-    "gtk-4.0/gtk-dark.css".source =
-      "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}/gtk-4.0/gtk-dark.css";
-  };
-
-  programs.ghostty = {
-    enable = true;
-
-    # If you're on a channel/flake that has ghostty packaged:
-    # comment this out if you install ghostty some other way
-    package = pkgs.ghostty;
-
-    settings = {
-      # ----- basic look -----
-      "font-family" = "JetBrainsMono Nerd Font";
-      "font-size" = 14;
-
-      "window-padding-x" = 8;
-      "window-padding-y" = 8;
-
-      # ----- your theme -----
-      # repeated keys like `palette` become a list
-      palette = [
-        "0=#181616"
-        "1=#c4746e"
-        "2=#8a9a7b"
-        "3=#c4b28a"
-        "4=#8ba4b0"
-        "5=#a292a3"
-        "6=#8ea4a2"
-        "7=#bcb093"
-        "8=#a6a69c"
-        "9=#e46876"
-        "10=#87a987"
-        "11=#6c8384"
-        "12=#7fb4ca"
-        "13=#938aa9"
-        "14=#7aa89f"
-        "15=#c5c9c5"
-      ];
-
-      background = "#181616";
-      foreground = "#c5c9c5";
-      "cursor-color" = "#c8c093";
-      "selection-background" = "#2d4f67";
-      "selection-foreground" = "#c8c093";
-    };
-  };
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    # claw-code: route to local Ollama instead of Anthropic/OpenAI
-    OPENAI_BASE_URL = "http://127.0.0.1:11434/v1";
-    OPENAI_API_KEY = "ollama";
-  };
-
-  systemd.user.services.ydotoold = {
-    Unit = {
-      Description = "ydotool daemon";
-      After = [ "default.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.ydotool}/bin/ydotoold";
-      Restart = "always";
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
-
 }

@@ -23,8 +23,6 @@
 
         rust-app-menu.url = "github:JackMechem/rust-app-menu";
         rust-app-menu.inputs.nixpkgs.follows = "nixpkgs";
-        server-dash-mono.url = "git+ssh://forgejo@gitssh.jackmechem.dev:443/jackmechem/server-dash-mono-repo.git";
-
         claude-code.url = "github:sadjow/claude-code-nix";
     };
 
@@ -53,8 +51,6 @@
                 modules = [
                     ./hosts/dellserv/configuration.nix
                     inputs.home-manager.nixosModules.default
-                    inputs.server-dash-mono.nixosModules.frontend
-                    inputs.server-dash-mono.nixosModules.api
                 ];
             };
         };
