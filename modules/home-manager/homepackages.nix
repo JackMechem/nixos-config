@@ -36,6 +36,7 @@ in
         # ===== Audio =====
         playerctl
         pavucontrol
+        spotify
 
         # ===== Authentication =====
         bitwarden-desktop
