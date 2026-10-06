@@ -51,6 +51,11 @@ in
         # ===== Note Taking =====
         obsidian
 
+        # ===== Music =====
+        musescore
+        ardour
+        lingot  # standalone tuner (bass/guitar)
+
         # ===== System Monitoring =====
         mission-center
         htop

@@ -35,6 +35,9 @@
         # ===== Flake Packages =====
         # To add a new flake package: add the input to flake.nix, then reference it here
         inputs.rust-app-menu.packages.${pkgs.system}.default
+
+        # Android shit
+        scrcpy
     ];
 
     # Yubikey support services

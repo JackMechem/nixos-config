@@ -49,6 +49,7 @@
     networking.firewall.allowedTCPPorts = [
         2200
         3000
+        8081
     ];
 
     # --- Nix Settings ---
