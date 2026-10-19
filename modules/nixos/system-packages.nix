@@ -34,7 +34,7 @@
 
         # ===== Flake Packages =====
         # To add a new flake package: add the input to flake.nix, then reference it here
-        inputs.rust-app-menu.packages.${pkgs.system}.default
+        inputs.rust-app-menu.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         # Android shit
         scrcpy

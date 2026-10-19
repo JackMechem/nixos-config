@@ -29,6 +29,7 @@ in
 
         # ===== Desktop / Wayland =====
         pkgs.sway-contrib.grimshot  # screenshots
+        wl-clipboard               # wl-copy/wl-paste (Claude Code image paste needs wl-paste)
         waypaper
         hyprpaper
         swaybg
@@ -64,7 +65,7 @@ in
         jdk
         gnumake
         postman
-        inputs.claude-code.packages.${pkgs.system}.claude-code
+        inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
         claw-code
         opencode
 
@@ -92,6 +93,6 @@ in
         jellyfin-desktop
 
         # ===== Flake Packages =====
-        inputs.hyprmwh.packages.${pkgs.system}.default
+        inputs.hyprmwh.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 }

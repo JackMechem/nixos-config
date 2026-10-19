@@ -1,10 +1,27 @@
 { pkgs, ... }:
+let
+    # Toggle a monitor off/on, restoring its layout from the monitor list below
+    toggleMonitor = pkgs.writeShellScript "togglemonitor" ''
+        mon="$1"
+        line="$2"
+        if ${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -e --arg m "$mon" '.[] | select(.name == $m)' >/dev/null; then
+            ${pkgs.hyprland}/bin/hyprctl keyword monitor "$mon,disable"
+        else
+            ${pkgs.hyprland}/bin/hyprctl keyword monitor "$line"
+        fi
+    '';
+in
 {
+    home.packages = [ pkgs.wofi-emoji ];
+
     wayland.windowManager.hyprland = {
         enable = true;
+        # Keep the hyprland.conf format; switching to "lua" means rewriting settings
+        configType = "hyprlang";
 
         settings =
             let
+                monitor3Line = "${monitor3},1920x1080@60,-2560x0,1,bitdepth,10";
                 monitor1 = "DP-1";
                 monitor2 = "DP-2";
                 monitor3 = "HDMI-A-1";
@@ -15,7 +32,7 @@
                 monitor = [
                     "${monitor1},2560x1440@144,0x0,1,bitdepth,10"
                     "${monitor2},1920x1080@75,2560x0,1,bitdepth,10"
-                    "${monitor3},1920x1080@60,-2560x0,1,bitdepth,10"
+                    monitor3Line
                 ];
 
                 # --- Workspaces ---
@@ -36,18 +53,16 @@
 
                 # --- Exec Once ---
                 exec-once = [
-                    "waypaper --restore"
-                    "gtkbar"
                     "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
                     "solaar -w hide"
                     "ydotoold"
-                    "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1"
+                    # Bar, wallpaper, notifications and polkit agent come from DankMaterialShell (dms.nix)
                 ];
 
                 # --- Variables ---
                 "$terminal" = "ghostty";
                 "$fileManager" = "thunar";
-                "$appMenu" = "hyprmwh --apps";
+                "$appMenu" = "dms ipc call spotlight toggle";
                 "$windowMoveMenu" = "hyprmwh --windows";
                 "$browser" = "zen-twilight";
                 #"$menu" = "rust-app-menu -ds";
@@ -55,6 +70,8 @@
                 env = [
                     "XCURSOR_SIZE,24"
                     "QT_QPA_PLATFORMTHEME,qt5ct"
+                    # Only plasma-applications.menu is installed; without this, "Open With" menus are empty
+                    "XDG_MENU_PREFIX,plasma-"
                 ];
 
                 # --- Input ---
@@ -125,7 +142,6 @@
                 };
 
                 dwindle = {
-                    pseudotile = "yes";
                     preserve_split = "yes";
                 };
 
@@ -147,12 +163,12 @@
                     "${mainMod}, SPACE, exec, $appMenu"
                     "${mainMod}, grave, exec, $windowMoveMenu"
                     "${mainMod}, P, pseudo"
-                    "${mainMod}, V, togglesplit"
+                    "${mainMod}, V, layoutmsg, togglesplit"
                     "${mainMod}, M, fullscreen, 1"
                     "${mainMod}, F, fullscreen, 0"
                     "${mainMod}, Escape, focuscurrentorlast"
-                    "${mainMod} SHIFT, P, exec, killall ags || exec ags"
-                    "${mainMod} SHIFT, S, exec, grimshot savecopy area"
+                    "${mainMod} SHIFT, P, exec, systemctl --user restart dms"
+                    "${mainMod} SHIFT, S, exec, dms screenshot region --no-confirm"
                     "${mainMod}, HOME, exec, wofi-emoji"
 
                     # Focus
@@ -205,28 +221,36 @@
                     "${mainMod}, O, togglespecialworkspace, magic"
                     "${mainMod} SHIFT, O, movetoworkspace, special:magic"
 
-                    # Multimedia
-                    ", XF86AudioPrev, exec, playerctl previous"
-                    ", XF86AudioPlay, exec, playerctl play-pause"
-                    ", XF86AudioPause, exec, playerctl pause"
-                    ", XF86AudioNext, exec, playerctl next"
-
                     # Custom scripts
-                    "${mainMod}, b, exec, bash -c 'pgrep gtkbar &>/dev/null && killall gtkbar || gtkbar &'"
-                    "${mainMod}, minus, exec, ~/.config/hypr/togglemonitor.sh ${monitor3}"
+                    "${mainMod}, b, exec, dms ipc call bar toggle"
+                    "${mainMod}, minus, exec, ${toggleMonitor} ${monitor3} '${monitor3Line}'"
+
+                    # DankMaterialShell
+                    "${mainMod}, comma, exec, dms ipc call settings focusOrToggle"
+                    "${mainMod}, N, exec, dms ipc call notifications toggle"
+                    "${mainMod} SHIFT, V, exec, dms ipc call clipboard toggle"
+                    "${mainMod}, X, exec, dms ipc call powermenu toggle"
+                    "${mainMod} SHIFT, D, exec, dms ipc call lock lock"
+                    "${mainMod} SHIFT, slash, exec, dms ipc call keybinds toggle hyprland"
+                    "CTRL ALT, Delete, exec, dms ipc call processlist focusOrToggle"
 
                     # Mouse: back thumb button -> middle click (mchose mouse)
                     ", mouse:275, exec, ydotool click 0xC2"
                 ];
 
+                # Volume/media via DMS (shows OSD)
                 bindle = [
-                    ", XF86AudioRaiseVolume, exec, pamixer -i 2"
-                    ", XF86AudioLowerVolume, exec, pamixer -d 2"
+                    ", XF86AudioRaiseVolume, exec, dms ipc call audio increment 2"
+                    ", XF86AudioLowerVolume, exec, dms ipc call audio decrement 2"
                 ];
 
                 bindl = [
-                    ", XF86AudioMute, exec, pamixer -t"
-                    ", XF86AudioMicMute, exec, pamixer --default-source -t"
+                    ", XF86AudioMute, exec, dms ipc call audio mute"
+                    ", XF86AudioMicMute, exec, dms ipc call audio micmute"
+                    ", XF86AudioPrev, exec, dms ipc call mpris previous"
+                    ", XF86AudioPlay, exec, dms ipc call mpris playPause"
+                    ", XF86AudioPause, exec, dms ipc call mpris playPause"
+                    ", XF86AudioNext, exec, dms ipc call mpris next"
                 ];
 
                 bindm = [

@@ -236,7 +236,7 @@
         unzip
         python3
         nodejs
-        inputs.claude-code.packages.${pkgs.system}.claude-code
+        inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
     ];
 
     virtualisation.docker.enable = true;

@@ -16,6 +16,7 @@
 
         # --- Desktop ---
         ../../modules/home-manager/hyprland-desktop.nix
+        ../../modules/home-manager/dms.nix           # DankMaterialShell
         ../../modules/home-manager/theme.nix         # GTK icons + cursor
         ../../modules/home-manager/ghostty.nix        # terminal emulator
 

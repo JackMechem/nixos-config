@@ -9,7 +9,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages =
-      [ inputs.gtkbar.packages.${pkgs.system}.default ];
+      [ inputs.gtkbar.packages.${pkgs.stdenv.hostPlatform.system}.default ];
   };
 }
 

@@ -124,6 +124,8 @@
 
     wayland.windowManager.hyprland = {
         enable = true;
+        # Keep the hyprland.conf format; switching to "lua" means rewriting settings
+        configType = "hyprlang";
 
         settings =
             let
@@ -242,7 +244,6 @@
                 };
 
                 dwindle = {
-                    pseudotile = "yes";
                     preserve_split = "yes";
                 };
 
@@ -265,12 +266,12 @@
                     "${mainMod}, TAB, togglefloating"
                     "${mainMod}, SPACE, exec, $menu"
                     "${mainMod}, P, pseudo"
-                    "${mainMod}, V, togglesplit"
+                    "${mainMod}, V, layoutmsg, togglesplit"
                     "${mainMod}, M, fullscreen, 1"
                     "${mainMod}, F, fullscreen, 0"
                     "${mainMod}, Escape, focuscurrentorlast"
                     "${mainMod} SHIFT, P, exec, killall ags || exec ags"
-                    "${mainMod} SHIFT, S, exec, grimshot savecopy area"
+                    "${mainMod} SHIFT, S, exec, dms screenshot region --no-confirm"
                     "${mainMod}, HOME, exec, wofi-emoji"
 
                     # Focus

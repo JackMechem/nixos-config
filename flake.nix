@@ -23,6 +23,12 @@
         rust-app-menu.url = "github:JackMechem/rust-app-menu";
         rust-app-menu.inputs.nixpkgs.follows = "nixpkgs";
         claude-code.url = "github:sadjow/claude-code-nix";
+
+        # Pinned to a release tag; bump deliberately
+        dms = {
+            url = "github:AvengeMedia/DankMaterialShell/v1.6.3";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
     };
 
     outputs =
