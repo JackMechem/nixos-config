@@ -1,13 +1,18 @@
 { pkgs, ... }:
 let
-    # Toggle a monitor off/on, restoring its layout from the monitor list below
+    monitor1 = "DP-1";
+    monitor2 = "DP-2";
+    monitor3 = "HDMI-A-1";
+
+    # Lua table for the left monitor, shared by the config and the toggle script
+    monitor3Spec = ''{ output = "${monitor3}", mode = "1920x1080@60", position = "-2560x0", scale = 1, bitdepth = 10 }'';
+
+    # Toggle a monitor off/on, restoring its layout from monitor3Spec
     toggleMonitor = pkgs.writeShellScript "togglemonitor" ''
-        mon="$1"
-        line="$2"
-        if ${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -e --arg m "$mon" '.[] | select(.name == $m)' >/dev/null; then
-            ${pkgs.hyprland}/bin/hyprctl keyword monitor "$mon,disable"
+        if ${pkgs.hyprland}/bin/hyprctl monitors -j | ${pkgs.jq}/bin/jq -e '.[] | select(.name == "${monitor3}")' >/dev/null; then
+            ${pkgs.hyprland}/bin/hyprctl eval 'hl.monitor({ output = "${monitor3}", disabled = true })'
         else
-            ${pkgs.hyprland}/bin/hyprctl keyword monitor "$line"
+            ${pkgs.hyprland}/bin/hyprctl eval 'hl.monitor(${monitor3Spec})'
         fi
     '';
 in
@@ -16,253 +21,221 @@ in
 
     wayland.windowManager.hyprland = {
         enable = true;
-        # Keep the hyprland.conf format; switching to "lua" means rewriting settings
-        configType = "hyprlang";
+        # Lua config (hyprland.lua) so DankMaterialShell can manage its fragments in ~/.config/hypr/dms/
+        configType = "lua";
 
-        settings =
-            let
-                monitor3Line = "${monitor3},1920x1080@60,-2560x0,1,bitdepth,10";
-                monitor1 = "DP-1";
-                monitor2 = "DP-2";
-                monitor3 = "HDMI-A-1";
-                mainMod = "SUPER";
-            in
-            {
-                # --- Monitor Configuration ---
-                monitor = [
-                    "${monitor1},2560x1440@144,0x0,1,bitdepth,10"
-                    "${monitor2},1920x1080@75,2560x0,1,bitdepth,10"
-                    monitor3Line
-                ];
+        extraConfig = ''
+            -- --- Monitor Configuration ---
+            hl.monitor({ output = "${monitor1}", mode = "2560x1440@144", position = "0x0", scale = 1, bitdepth = 10 })
+            hl.monitor({ output = "${monitor2}", mode = "1920x1080@75", position = "2560x0", scale = 1, bitdepth = 10 })
+            hl.monitor(${monitor3Spec})
 
-                # --- Workspaces ---
-                workspace = [
-                    "1,monitor:${monitor1},default:true"
-                    "2,monitor:${monitor1}"
-                    "3,monitor:${monitor1}"
-                    "4,monitor:${monitor1}"
-                    "5,monitor:${monitor1}"
-                    "6,monitor:${monitor2},default:true"
-                    "7,monitor:${monitor2}"
-                    "8,monitor:${monitor2}"
-                    "9,monitor:${monitor2}"
-                    "10,monitor:${monitor2}"
-                    "11,monitor:${monitor3},default:true"
-                    "12,monitor:${monitor3}"
-                ];
+            -- --- Workspaces ---
+            for i = 1, 5 do
+                hl.workspace_rule({ workspace = tostring(i), monitor = "${monitor1}", default = (i == 1) })
+            end
+            for i = 6, 10 do
+                hl.workspace_rule({ workspace = tostring(i), monitor = "${monitor2}", default = (i == 6) })
+            end
+            hl.workspace_rule({ workspace = "11", monitor = "${monitor3}", default = true })
+            hl.workspace_rule({ workspace = "12", monitor = "${monitor3}" })
 
-                # --- Exec Once ---
-                exec-once = [
-                    "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-                    "solaar -w hide"
-                    "ydotoold"
-                    # Bar, wallpaper, notifications and polkit agent come from DankMaterialShell (dms.nix)
-                ];
+            -- --- Exec Once ---
+            -- Bar, wallpaper, notifications and polkit agent come from DankMaterialShell (dms.nix)
+            hl.on("hyprland.start", function()
+                hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+                hl.exec_cmd("solaar -w hide")
+                hl.exec_cmd("ydotoold")
+            end)
 
-                # --- Variables ---
-                "$terminal" = "ghostty";
-                "$fileManager" = "thunar";
-                "$appMenu" = "dms ipc call spotlight toggle";
-                "$windowMoveMenu" = "hyprmwh --windows";
-                "$browser" = "zen-twilight";
-                #"$menu" = "rust-app-menu -ds";
+            -- --- Variables ---
+            local terminal       = "ghostty"
+            local fileManager    = "thunar"
+            local appMenu        = "dms ipc call spotlight toggle"
+            local windowMoveMenu = "hyprmwh --windows"
+            local browser        = "zen-twilight"
+            local mainMod        = "SUPER"
 
-                env = [
-                    "XCURSOR_SIZE,24"
-                    "QT_QPA_PLATFORMTHEME,qt5ct"
-                    # Only plasma-applications.menu is installed; without this, "Open With" menus are empty
-                    "XDG_MENU_PREFIX,plasma-"
-                ];
+            hl.env("XCURSOR_SIZE", "24")
+            hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
+            -- Only plasma-applications.menu is installed; without this, "Open With" menus are empty
+            hl.env("XDG_MENU_PREFIX", "plasma-")
 
-                # --- Input ---
+            hl.config({
+                -- --- Input ---
                 input = {
-                    kb_layout = "us";
-                    follow_mouse = 1;
-                    mouse_refocus = true;
+                    kb_layout = "us",
+                    follow_mouse = 1,
+                    mouse_refocus = true,
                     touchpad = {
-                        natural_scroll = "no";
-                    };
-                    accel_profile = "flat";
-                    sensitivity = 0;
-                };
+                        natural_scroll = false,
+                    },
+                    accel_profile = "flat",
+                    sensitivity = 0,
+                },
 
-                # --- General ---
+                -- --- General ---
                 general = {
-                    gaps_in = 2;
-                    gaps_out = 3;
-                    border_size = 1;
-                    "col.active_border" = "rgba(ffffff30)";
-                    "col.inactive_border" = "rgba(2c2b3180)";
-                    layout = "dwindle";
-                    allow_tearing = false;
-                };
+                    gaps_in = 2,
+                    gaps_out = 3,
+                    border_size = 1,
+                    col = {
+                        active_border = "rgba(ffffff30)",
+                        inactive_border = "rgba(2c2b3180)",
+                    },
+                    layout = "dwindle",
+                    allow_tearing = false,
+                },
 
-                # --- Fix Zoom ---
-                windowrule = [
-                    "match:class ^(zoom)$, no_follow_mouse 1"
-                    "match:class ^(zoom)$, suppress_event maximize"
-                ];
-
-                layerrule = [
-                    "blur on, match:namespace Launcher"
-                    "ignore_alpha 0.1, match:namespace Launcher"
-                    "blur on, match:namespace hyprmwh"
-                    "ignore_alpha 0.1, match:namespace hyprmwh"
-                ];
-
-                # --- Decoration ---
+                -- --- Decoration ---
                 decoration = {
-                    rounding = 12;
+                    rounding = 12,
                     blur = {
-                        enabled = true;
-                        new_optimizations = true;
-                        size = 8;
-                        passes = 2;
-                    };
+                        enabled = true,
+                        new_optimizations = true,
+                        size = 8,
+                        passes = 2,
+                    },
                     shadow = {
-                        enabled = true;
-                        range = 10;
-                        render_power = 3;
-                        color = "rgba(00000040)";
-                    };
-                };
+                        enabled = true,
+                        range = 10,
+                        render_power = 3,
+                        color = "rgba(00000040)",
+                    },
+                },
 
-                # --- Animations ---
+                -- --- Animations ---
                 animations = {
-                    enabled = false;
-                    bezier = "myBezier, 0.05, 0.9, 0.1, 1";
-                    animation = [
-                        "windows, 1, 3, myBezier"
-                        "windowsOut, 1, 7, default, popin 80%"
-                        "border, 1, 10, default"
-                        "borderangle, 1, 8, default"
-                        "fade, 1, 7, default"
-                        "workspaces, 1, 6, default"
-                    ];
-                };
+                    enabled = false,
+                },
 
                 dwindle = {
-                    preserve_split = "yes";
-                };
+                    preserve_split = true,
+                },
 
                 misc = {
-                    force_default_wallpaper = 0;
-                };
+                    force_default_wallpaper = 0,
+                },
+            })
 
-                # --- Keybinds --- 
-                bind = [
-                    # System/Rice
-                    "${mainMod}, RETURN, exec, $terminal"
-                    "${mainMod} SHIFT, RETURN, exec, [float] $terminal"
-                    "${mainMod}, Q, killactive"
-                    "${mainMod} SHIFT, M, exit"
-                    "${mainMod}, E, exec, $fileManager"
-                    "${mainMod} SHIFT, E, exec, [float] $fileManager"
-                    "${mainMod}, W, exec, $browser"
-                    "${mainMod}, TAB, togglefloating"
-                    "${mainMod}, SPACE, exec, $appMenu"
-                    "${mainMod}, grave, exec, $windowMoveMenu"
-                    "${mainMod}, P, pseudo"
-                    "${mainMod}, V, layoutmsg, togglesplit"
-                    "${mainMod}, M, fullscreen, 1"
-                    "${mainMod}, F, fullscreen, 0"
-                    "${mainMod}, Escape, focuscurrentorlast"
-                    "${mainMod} SHIFT, P, exec, systemctl --user restart dms"
-                    "${mainMod} SHIFT, S, exec, dms screenshot region --no-confirm"
-                    "${mainMod}, HOME, exec, wofi-emoji"
+            hl.curve("myBezier", { type = "bezier", points = { {0.05, 0.9}, {0.1, 1} } })
+            hl.animation({ leaf = "windows",     enabled = true, speed = 3,  bezier = "myBezier" })
+            hl.animation({ leaf = "windowsOut",  enabled = true, speed = 7,  bezier = "default", style = "popin 80%" })
+            hl.animation({ leaf = "border",      enabled = true, speed = 10, bezier = "default" })
+            hl.animation({ leaf = "borderangle", enabled = true, speed = 8,  bezier = "default" })
+            hl.animation({ leaf = "fade",        enabled = true, speed = 7,  bezier = "default" })
+            hl.animation({ leaf = "workspaces",  enabled = true, speed = 6,  bezier = "default" })
 
-                    # Focus
-                    "${mainMod}, h, movefocus, l"
-                    "${mainMod}, l, movefocus, r"
-                    "${mainMod}, k, movefocus, u"
-                    "${mainMod}, j, movefocus, d"
+            -- --- Fix Zoom ---
+            hl.window_rule({ name = "zoom-no-follow-mouse", match = { class = "^(zoom)$" }, no_follow_mouse = true })
+            hl.window_rule({ name = "zoom-suppress-maximize", match = { class = "^(zoom)$" }, suppress_event = "maximize" })
 
-                    # Move
-                    "${mainMod} SHIFT, h, movewindow, l"
-                    "${mainMod} SHIFT, l, movewindow, r"
-                    "${mainMod} SHIFT, k, movewindow, u"
-                    "${mainMod} SHIFT, j, movewindow, d"
+            hl.layer_rule({ match = { namespace = "Launcher" }, blur = true, ignore_alpha = 0.1 })
+            hl.layer_rule({ match = { namespace = "hyprmwh" }, blur = true, ignore_alpha = 0.1 })
 
-                    # Resize
-                    "${mainMod} ALT, h, resizeactive, -160 0"
-                    "${mainMod} ALT, l, resizeactive, 160 0"
-                    "${mainMod} ALT, k, resizeactive, 0 -160"
-                    "${mainMod} ALT, j, resizeactive, 0 160"
+            -- --- Keybinds ---
+            local function exec(cmd, rules)
+                return hl.dsp.exec_cmd(cmd, rules)
+            end
 
-                    # Workspaces
-                    "${mainMod}, 1, workspace, 1"
-                    "${mainMod}, 2, workspace, 2"
-                    "${mainMod}, 3, workspace, 3"
-                    "${mainMod}, 4, workspace, 4"
-                    "${mainMod}, 5, workspace, 5"
-                    "${mainMod}, 6, workspace, 6"
-                    "${mainMod}, 7, workspace, 7"
-                    "${mainMod}, 8, workspace, 8"
-                    "${mainMod}, 9, workspace, 9"
-                    "${mainMod}, 0, workspace, 10"
-                    "${mainMod} ALT, 1, workspace, 11"
-                    "${mainMod} ALT, 2, workspace, 12"
+            -- System/Rice
+            hl.bind(mainMod .. " + RETURN", exec(terminal))
+            hl.bind(mainMod .. " + SHIFT + RETURN", exec(terminal, { float = true }))
+            hl.bind(mainMod .. " + Q", hl.dsp.window.close())
+            hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exit())
+            hl.bind(mainMod .. " + E", exec(fileManager))
+            hl.bind(mainMod .. " + SHIFT + E", exec(fileManager, { float = true }))
+            hl.bind(mainMod .. " + W", exec(browser))
+            hl.bind(mainMod .. " + TAB", hl.dsp.window.float({ action = "toggle" }))
+            hl.bind(mainMod .. " + SPACE", exec(appMenu))
+            hl.bind(mainMod .. " + grave", exec(windowMoveMenu))
+            hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+            hl.bind(mainMod .. " + V", hl.dsp.layout("togglesplit"))
+            hl.bind(mainMod .. " + M", hl.dsp.window.fullscreen({ mode = "maximized" }))
+            hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
+            hl.bind(mainMod .. " + Escape", hl.dsp.focus({ last = true }))
+            hl.bind(mainMod .. " + SHIFT + P", exec("systemctl --user restart dms"))
+            hl.bind(mainMod .. " + SHIFT + S", exec("dms screenshot region --no-confirm"))
+            hl.bind(mainMod .. " + HOME", exec("wofi-emoji"))
 
-                    # Move to Workspace
-                    "${mainMod} SHIFT, 1, movetoworkspace, 1"
-                    "${mainMod} SHIFT, 2, movetoworkspace, 2"
-                    "${mainMod} SHIFT, 3, movetoworkspace, 3"
-                    "${mainMod} SHIFT, 4, movetoworkspace, 4"
-                    "${mainMod} SHIFT, 5, movetoworkspace, 5"
-                    "${mainMod} SHIFT, 6, movetoworkspace, 6"
-                    "${mainMod} SHIFT, 7, movetoworkspace, 7"
-                    "${mainMod} SHIFT, 8, movetoworkspace, 8"
-                    "${mainMod} SHIFT, 9, movetoworkspace, 9"
-                    "${mainMod} SHIFT, 0, movetoworkspace, 10"
-                    "${mainMod} ALT SHIFT, 1, movetoworkspace, 11"
-                    "${mainMod} ALT SHIFT, 2, movetoworkspace, 12"
+            -- Focus / Move / Resize
+            local dirs = { h = "left", l = "right", k = "up", j = "down" }
+            local resize = { h = { -160, 0 }, l = { 160, 0 }, k = { 0, -160 }, j = { 0, 160 } }
+            for key, dir in pairs(dirs) do
+                hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir }))
+                hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ direction = dir }))
+                hl.bind(mainMod .. " + ALT + " .. key,
+                    hl.dsp.window.resize({ x = resize[key][1], y = resize[key][2], relative = true }))
+            end
 
-                    # Special
-                    "${mainMod}, O, togglespecialworkspace, magic"
-                    "${mainMod} SHIFT, O, movetoworkspace, special:magic"
+            -- Workspaces 1-10 on number keys, 11-12 on ALT+1/2
+            for i = 1, 10 do
+                local key = i % 10
+                hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+                hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+            end
+            for i = 11, 12 do
+                local key = i - 10
+                hl.bind(mainMod .. " + ALT + " .. key, hl.dsp.focus({ workspace = i }))
+                hl.bind(mainMod .. " + ALT + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
+            end
 
-                    # Custom scripts
-                    "${mainMod}, b, exec, dms ipc call bar toggle"
-                    "${mainMod}, minus, exec, ${toggleMonitor} ${monitor3} '${monitor3Line}'"
+            -- Special
+            hl.bind(mainMod .. " + O", hl.dsp.workspace.toggle_special("magic"))
+            hl.bind(mainMod .. " + SHIFT + O", hl.dsp.window.move({ workspace = "special:magic" }))
 
-                    # DankMaterialShell
-                    "${mainMod}, comma, exec, dms ipc call settings focusOrToggle"
-                    "${mainMod}, N, exec, dms ipc call notifications toggle"
-                    "${mainMod} SHIFT, V, exec, dms ipc call clipboard toggle"
-                    "${mainMod}, X, exec, dms ipc call powermenu toggle"
-                    "${mainMod} SHIFT, D, exec, dms ipc call lock lock"
-                    "${mainMod} SHIFT, slash, exec, dms ipc call keybinds toggle hyprland"
-                    "CTRL ALT, Delete, exec, dms ipc call processlist focusOrToggle"
+            -- Custom scripts
+            hl.bind(mainMod .. " + b", exec("dms ipc call bar toggle"))
+            hl.bind(mainMod .. " + minus", exec("${toggleMonitor}"))
 
-                    # Mouse: back thumb button -> middle click (mchose mouse)
-                    ", mouse:275, exec, ydotool click 0xC2"
-                ];
+            -- DankMaterialShell
+            hl.bind(mainMod .. " + comma", exec("dms ipc call settings focusOrToggle"))
+            hl.bind(mainMod .. " + N", exec("dms ipc call notifications toggle"))
+            hl.bind(mainMod .. " + SHIFT + V", exec("dms ipc call clipboard toggle"))
+            hl.bind(mainMod .. " + X", exec("dms ipc call powermenu toggle"))
+            hl.bind(mainMod .. " + SHIFT + D", exec("dms ipc call lock lock"))
+            hl.bind(mainMod .. " + SHIFT + slash", exec("dms ipc call keybinds toggle hyprland"))
+            hl.bind("CTRL + ALT + Delete", exec("dms ipc call processlist focusOrToggle"))
 
-                # Volume/media via DMS (shows OSD)
-                bindle = [
-                    ", XF86AudioRaiseVolume, exec, dms ipc call audio increment 2"
-                    ", XF86AudioLowerVolume, exec, dms ipc call audio decrement 2"
-                ];
+            -- Mouse: back thumb button -> middle click (mchose mouse)
+            hl.bind("mouse:275", exec("ydotool click 0xC2"))
 
-                bindl = [
-                    ", XF86AudioMute, exec, dms ipc call audio mute"
-                    ", XF86AudioMicMute, exec, dms ipc call audio micmute"
-                    ", XF86AudioPrev, exec, dms ipc call mpris previous"
-                    ", XF86AudioPlay, exec, dms ipc call mpris playPause"
-                    ", XF86AudioPause, exec, dms ipc call mpris playPause"
-                    ", XF86AudioNext, exec, dms ipc call mpris next"
-                ];
+            -- Volume/media via DMS (shows OSD)
+            hl.bind("XF86AudioRaiseVolume", exec("dms ipc call audio increment 2"), { locked = true, repeating = true })
+            hl.bind("XF86AudioLowerVolume", exec("dms ipc call audio decrement 2"), { locked = true, repeating = true })
+            hl.bind("XF86AudioMute", exec("dms ipc call audio mute"), { locked = true })
+            hl.bind("XF86AudioMicMute", exec("dms ipc call audio micmute"), { locked = true })
+            hl.bind("XF86AudioPrev", exec("dms ipc call mpris previous"), { locked = true })
+            hl.bind("XF86AudioPlay", exec("dms ipc call mpris playPause"), { locked = true })
+            hl.bind("XF86AudioPause", exec("dms ipc call mpris playPause"), { locked = true })
+            hl.bind("XF86AudioNext", exec("dms ipc call mpris next"), { locked = true })
 
-                bindm = [
-                    "${mainMod}, mouse:272, movewindow"
-                    "${mainMod}, mouse:273, resizewindow"
-                ];
+            -- Mouse move/resize
+            hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+            hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-                # Mouse scroll workspaces
-                bindn = [
-                    "${mainMod}, mouse_down, workspace, e+1"
-                    "${mainMod}, mouse_up, workspace, e-1"
-                ];
-            };
+            -- Mouse scroll workspaces
+            hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), { non_consuming = true })
+            hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }), { non_consuming = true })
+
+            -- --- DankMaterialShell fragments ---
+            -- Written by the DMS settings GUI into ~/.config/hypr/dms/; loaded last so they override the above.
+            -- Missing files are skipped. DMS can't add these lines itself (this file is read-only), so each
+            -- settings page it should manage needs its line here. dms.binds/binds-user start empty and only
+            -- hold binds added or changed in the DMS keybinds page.
+            -- dms.outputs is deliberately not loaded: monitors (10-bit) stay in this file.
+            local function dms_require(name)
+                local ok, err = pcall(require, name)
+                if not ok and not tostring(err):find("module '" .. name .. "' not found", 1, true) then
+                    error(err)
+                end
+            end
+            dms_require("dms.layout")
+            dms_require("dms.cursor")
+            dms_require("dms.windowrules")
+            dms_require("dms.colors")
+            dms_require("dms.binds")
+            dms_require("dms.binds-user")
+        '';
     };
 }

@@ -42,12 +42,15 @@ modules/home-manager/      user modules (hyprland, dms, zsh, tmux, ghostty, pack
 - **Login:** GDM. Pick Hyprland or Plasma at login.
 - **Compositor:** Hyprland, configured in Nix via home-manager.
   - `modules/home-manager/hyprland-desktop.nix`: monitors, workspaces, keybinds. Used by both `desktop` and `t480`.
+    Written in Hyprland's Lua format (`configType = "lua"`, generates `~/.config/hypr/hyprland.lua`).
+    Validate a build with `Hyprland --verify-config -c <generated hyprland.lua>`.
   - `modules/home-manager/hyprland.nix`: older laptop config with hyprlock/hypridle. Not imported by any host right now.
 - **Shell:** DankMaterialShell (`modules/home-manager/dms.nix`). Provides the bar, launcher, notifications, control center, wallpaper, lock screen, clipboard and polkit agent.
   - Runs as the `dms` systemd user service, bound to `hyprland-session.target`, so it only starts in Hyprland and not in Plasma.
   - Settings are not managed in Nix. They live in `~/.config/DankMaterialShell/` so the DMS settings GUI (Super+,) can edit them.
   - Pinned to a release tag in `flake.nix`. To upgrade, change the tag and run `nix flake lock --update-input dms`.
   - Don't run `dms setup`. It writes its own Hyprland config and would override the Nix-generated one.
+  - `hyprland.lua` loads the DMS fragments `dms.layout`, `dms.cursor`, `dms.windowrules`, `dms.colors`, `dms.binds` and `dms.binds-user` from `~/.config/hypr/dms/` (written by the DMS settings GUI), so those settings pages work. `dms.outputs` is deliberately not loaded: monitors (10-bit) stay in Nix. DMS cannot add `require` lines itself because `hyprland.lua` is read-only, so a new DMS page needs its line added in Nix.
 - **Fallback:** Plasma 6 (`modules/nixos/desktop.nix`).
 
 ## Keybinds (Hyprland)
